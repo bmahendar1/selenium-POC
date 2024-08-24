@@ -15,13 +15,14 @@ public class Hooks {
 
 	@Before(
 			order=1, 
-			value= "@login_required"
+			value= "not @login_not_required"
 			)
 	public void login() throws Exception {
 		LoginSteps loginSteps = new LoginSteps(initDriver);
 		
 		loginSteps.user_opens_the_favourite_browser_and_types_url();
-		loginSteps.the_login_page_appears_then_the_user_enters_username_password_and_clicks_on_login();
+		loginSteps.the_login_page_appears();
+		loginSteps.user_enters_username_password_and_clicks_on_login();
 		loginSteps.the_user_navigate_to_home_or_landing_page();
 	}
 	
@@ -30,6 +31,7 @@ public class Hooks {
 			order=10
 			)
 	public void tearDown() {
-		initDriver.getDriver().close();
+		if(initDriver.getDriver() != null)
+			initDriver.getDriver().close();
 	}
 }

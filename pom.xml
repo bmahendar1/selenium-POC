@@ -15,6 +15,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M9</version>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
 					<parallel>methods</parallel>
@@ -108,12 +109,23 @@
 			<artifactId>cucumber-testng</artifactId>
 			<version>7.18.0</version>
 		</dependency>
-		<!--
-			https://mvnrepository.com/artifact/io.cucumber/cucumber-picocontainer -->
+		<!--https://mvnrepository.com/artifact/io.cucumber/cucumber-picocontainer -->
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-picocontainer</artifactId>
 			<version>7.18.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>5.3.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>5.3.0</version>
 		</dependency>
 	</dependencies>
 </project>

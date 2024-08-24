@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import config.initialization.PropertyFiles;
+import config.initialization.DataFiles;
 
 public class Dashboard {
 
@@ -29,7 +29,7 @@ public class Dashboard {
 	
 	public String getDashboardText() throws Exception {
 		
-		seconds = Long.valueOf(getProperty(PropertyFiles.CONFIG_FILE_PATH, "implicitWait"));
+		seconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "implicitWait"));
 		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(seconds));
 		
 		return driver.findElement(dashboardText).getText();
@@ -41,7 +41,7 @@ public class Dashboard {
 	
 	public boolean dropdownMenuDisplayed() throws Exception {
 		
-		long explicitWait = Long.valueOf(getProperty(PropertyFiles.CONFIG_FILE_PATH, "implicitWait"));
+		long explicitWait = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "implicitWait"));
 		WebElement element = driver.findElement(userDropdownMenu);
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));

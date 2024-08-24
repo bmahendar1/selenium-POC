@@ -1,8 +1,12 @@
 package utils;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class Utils {
@@ -28,4 +32,15 @@ public class Utils {
 			throw new Exception("Failed to locate the at given path "+e.getMessage());
 		}
 	}
+	
+	public static List<String[]> readCSV(String filePath) throws IOException {
+        List<String[]> data = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                data.add(line.split(","));
+            }
+        }
+        return data;
+    }
 }
