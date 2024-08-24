@@ -1,7 +1,7 @@
 package stepdefinations.recruitment;
 
 import config.initialization.InitDriver;
-import config.initialization.PropertyFiles;
+import config.initialization.DataFiles;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
@@ -17,12 +17,17 @@ import static org.testng.Assert.assertTrue;
 import static utils.Utils.*;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -35,12 +40,15 @@ public class CandidatesSearchSteps {
 	private Scenario scenario;
 	private TopBar topBar;
 	private WebDriverWait wait;
+	private int year;
+	private int month;
+	private int date;
 	
 	
 	public CandidatesSearchSteps(InitDriver initDriver) throws Exception {
 		this.initDriver = initDriver;
 		
-		long explicitWait = Long.valueOf(getProperty(PropertyFiles.CONFIG_FILE_PATH, "explicitWait"));
+		long explicitWait = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
 		wait = new WebDriverWait(initDriver.getDriver(), Duration.ofMillis(explicitWait));
 		candidates =  new Candidates(initDriver.getDriver());
 		
@@ -65,7 +73,8 @@ public class CandidatesSearchSteps {
 	public void user_logged_into_application_and_navigates_to_recruitment_page() {
 		
 		SidePanel sidePanel = new SidePanel(initDriver.getDriver());
-		sidePanel.clickOnJobTitleDropDown();
+		sidePanel.clickOnRecruitmentOption();
+		
 	}
 	
 	
@@ -165,18 +174,33 @@ public class CandidatesSearchSteps {
 	
 	
 	@Given("The user selects year {int} month {int} date {int} from date of application calender")
-	public void the_user_selects_year_month_date_from_date_of_application_calender (int year, int month, int date) {
+	public void the_user_selects_year_month_date_from_date_of_application_calender (int year, int month, int date) throws Exception {
+		
 		candidates.clickOnDateOfApplicationDropdown();
-		try {
-			Thread.sleep(6000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		candidates.selectDateFromCalender(year, month, date);
-		this.option = year+"-"+month+"-"+date;
+		
+		this.year= year;
+		this.month= month;
+		this.date= date;
 	}
 	
+	
+	@Given("The user selects {string} method from the method of application dropdown")
+	public void the_user_selects_method_from_method_of_application_dropdown (String method) throws Exception {
+		
+		candidates.clickOnMethodOfApplicationDropdown();
+		
+		Actions actions = new Actions(initDriver.getDriver());
+		
+		actions.sendKeys(Keys.DOWN).perform();
+		
+		if(method.equals("online"))
+			actions.sendKeys(Keys.DOWN).perform();
+		
+		actions.sendKeys(Keys.ENTER).perform();
+		Thread.sleep(5000);
+		this.option= method;
+	}
 	
 	
 	@When("User clicks on the search button")
@@ -226,6 +250,28 @@ public class CandidatesSearchSteps {
 			
 			cells = candidates.getCellsFromCandidateColumn();
 			assertListContains(cells, cell -> cell.getText().toLowerCase().contains(option.toLowerCase()), "The table doesn't show the records match candidate name");
+		
+		} else if(tags.contains("@search_by_date_of_application_match")) {
+			cells = candidates.getCellsFromDateOfApplicationColumn();
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			
+			String expectedDateStr = LocalDate.of(year, month, date).format(formatter);
+			LocalDate expectedDate = LocalDate.parse(expectedDateStr);
+			
+			for(WebElement cell: cells) {
+				String actualDateStr = cell.getText();
+				LocalDate actualDate = LocalDate.parse(actualDateStr, formatter);
+				
+				assertTrue(
+						actualDate.isAfter(expectedDate) || actualDate.isEqual(expectedDate), 
+						"The date is not equal to or after the expected date, "+actualDate
+						);
+			}
+		} else if(tags.contains("@search_by_method_of_application_match")) {
+			cells = candidates.getCellsFromVacancyColumn();
+			
+			assertTrue(cells.size() > 0, "There are no matching records");
 		}
 	}
 	
@@ -233,7 +279,7 @@ public class CandidatesSearchSteps {
 	@Then("the candidate tab is default tab")
 	public void the_candidate_tab_is_default_tab() throws Exception {
 		
-		long seconds = Long.valueOf(getProperty(PropertyFiles.CONFIG_FILE_PATH, "explicitWait"));
+		long seconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
 		
 		TopBar topBar = new TopBar(initDriver.getDriver());
 		

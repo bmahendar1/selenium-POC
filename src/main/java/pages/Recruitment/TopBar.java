@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import config.initialization.PropertyFiles;
+import config.initialization.DataFiles;
 
 import static utils.Utils.*;
 
@@ -19,14 +19,18 @@ public class TopBar {
 	
 	private By candidateVisitedNode = By.xpath("//nav[@aria-label='Topbar Menu']/ul/li[1]");
 	private By vacanciesVisitedNode = By.xpath("//nav[@aria-label='Topbar Menu']/ul/li[2]");
+	private By helpButton = By.xpath("//button[@title='Help']");
 	
-	public TopBar(WebDriver driver) {
+	
+	private WebDriverWait wait;
+	
+	public TopBar(WebDriver driver) throws Exception {
 		this.driver = driver;
+		long milliSeconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
+		wait = new WebDriverWait(driver, Duration.ofMillis(milliSeconds));
 	}
 
 	public WebElement getCandidateElement() throws Exception {
-		long milliSeconds = Long.valueOf(getProperty(PropertyFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(milliSeconds));
 		wait.until(ExpectedConditions.refreshed(new ExpectedCondition<Boolean>() {
 
 			@Override
@@ -40,5 +44,14 @@ public class TopBar {
 	
 	public WebElement getVacanciesElement() {
 		return driver.findElement(vacanciesVisitedNode);
+	}
+	
+	
+	public WebElement getHelpButton() {
+		return driver.findElement(helpButton);
+	}
+	
+	public void clickOnHelpButton() {
+		getHelpButton().click();
 	}
 }

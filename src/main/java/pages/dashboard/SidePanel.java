@@ -14,7 +14,7 @@ public class SidePanel {
 		this.driver = driver;
 	}
 	
-	public void clickOnJobTitleDropDown() {
+	public void clickOnRecruitmentOption() {
 		driver.findElement(recruitment).click();
 	}
 }
