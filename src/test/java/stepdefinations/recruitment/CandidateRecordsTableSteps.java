@@ -8,8 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import config.initialization.InitDriver;
-import config.initialization.DataFiles;
+import config.initialization.Context;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -17,32 +16,32 @@ import pages.Recruitment.CandidateRecordsFoundTable;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-import static utils.Utils.*;
 
 import java.time.Duration;
 
 public class CandidateRecordsTableSteps {
 	
-	private InitDriver initDriver;
+	private Context context;
 	private CandidateRecordsFoundTable recordsFoundTbl;
-	private long milliSeconds;
+	private long explicitWait;
 	private WebDriverWait wait;
 	private JavascriptExecutor jse;
 	
 	private String candidateName;
 
-	public CandidateRecordsTableSteps(InitDriver initDriver) throws Exception {
-		this.initDriver= initDriver;
-		this.recordsFoundTbl= new CandidateRecordsFoundTable(this.initDriver.getDriver());
-		this.milliSeconds= Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		this.wait= new WebDriverWait(initDriver.getDriver(), Duration.ofMillis(milliSeconds));
+	public CandidateRecordsTableSteps(Context context) throws Exception {
+		this.context= context;
+		this.recordsFoundTbl= new CandidateRecordsFoundTable(this.context.getDriver());
+//		this.explicitWait= Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
+		this.explicitWait= (Long) context.getOptions().get("explicitWait");
+		this.wait= new WebDriverWait(context.getDriver(), Duration.ofMillis(explicitWait));
 	}
 	
 	
 	@Given("The user scrolldown to the bottom of the page")
 	public void the_user_scrolldown_to_the_bottom_of_the_page() throws Exception {
 		
-		jse = (JavascriptExecutor) initDriver.getDriver();		
+		jse = (JavascriptExecutor) context.getDriver();		
 
 //		wait.until(new ExpectedCondition<Boolean>() {
 //

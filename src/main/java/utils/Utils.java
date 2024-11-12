@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -43,4 +44,29 @@ public class Utils {
         }
         return data;
     }
+	
+	public static boolean isFileDownloaded(String downloadPath, String fileName) {
+		
+		File dir = new File(downloadPath);
+		
+		File[] dirContent = dir.listFiles();
+		
+		for(File file: dirContent) {
+//			System.out.println(file.getName());
+			if(file.getName().equals(fileName) && !fileName.endsWith(".crdownload")) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static void sleep(long millis) {
+		
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }

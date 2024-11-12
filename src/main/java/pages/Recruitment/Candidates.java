@@ -11,9 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import config.initialization.DataFiles;
-
-import static utils.Utils.*;
+import config.initialization.Context;
 
 public class Candidates {
 	
@@ -47,9 +45,13 @@ public class Candidates {
 	
 	
 	private WebDriver driver;
+	private Context context;
+	private Long explicitWait;
 	
-	public Candidates(WebDriver driver) {
+	public Candidates(WebDriver driver, Context context) {
 		this.driver = driver;
+		this.context = context;
+		this.explicitWait = (Long) context.getOptions().get("explicitWait");
 	}
 	
 	
@@ -134,9 +136,8 @@ public class Candidates {
 	
 	
 	public void selectOptionFromCandidateNameHints() throws Exception {
-		
-		long seconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(seconds));
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
 		
 		wait.until(new ExpectedCondition<Boolean>(){
 
@@ -199,8 +200,8 @@ public class Candidates {
 	}
 	
 	private void clickOnMonthDropdown() throws Exception {
-		long milliSeconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(milliSeconds));
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
 		
 		wait.until(ExpectedConditions.elementToBeClickable(calenderMonthDropdown));
 		driver.findElement(calenderMonthDropdown).click();
@@ -208,8 +209,8 @@ public class Candidates {
 	
 	
 	private void selectMonth(String month) throws Exception {
-		long milliSeconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(milliSeconds));
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
 		
 		By monthLocator = By.xpath(monthOption.replace("{MONTH}", month));
 		
@@ -219,8 +220,8 @@ public class Candidates {
 	
 	
 	private void clickOnYearDropdown() throws Exception {
-		long milliSeconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(milliSeconds));
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
 		
 		wait.until(ExpectedConditions.elementToBeClickable(calenderYearDropdown));
 		driver.findElement(calenderYearDropdown).click();
@@ -228,8 +229,8 @@ public class Candidates {
 	
 	
 	private void selectYear(int year) throws Exception {
-		long milliSeconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(milliSeconds));
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
 		
 		By yearLocator = By.xpath(yearOption.replace("{YEAR}", Integer.toString(year)));
 		
@@ -239,8 +240,8 @@ public class Candidates {
 	
 	
 	private void selectDate(int date) throws Exception {
-		long milliSeconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(milliSeconds));
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
 		
 		By dateLocator = By.xpath(dateOption.replace("{DATE}", Integer.toString(date)));
 		
@@ -256,8 +257,8 @@ public class Candidates {
 	 */
 	
 	public boolean infoPopupDisplayed() throws Exception {
-		Long seconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(seconds));
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
 		
 		wait.until(ExpectedConditions.visibilityOf(driver.findElement(infoPopup)));
 		
@@ -306,8 +307,7 @@ public class Candidates {
 	
 	private List<WebElement> getCells(By location) throws Exception {
 		
-		long milliSeconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(milliSeconds), null);
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait), null);
 		
 		List<WebElement> cells = driver.findElements(location);
 		wait.until(ExpectedConditions.visibilityOfAllElements(cells));

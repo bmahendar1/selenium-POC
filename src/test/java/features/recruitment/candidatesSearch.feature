@@ -1,5 +1,7 @@
-@smoke @regression 
+@smoke 
+@regression 
 @recruitment 
+@candidates
 Feature: Recruitement search for candidates feature
 
 	Background:
@@ -40,9 +42,9 @@ Feature: Recruitement search for candidates feature
     When User clicks on the search button
     Then No records found message displays
 
-  @search_by_hirining_manager_match
+  @search_by_hiring_manager_match
   Scenario: Search for the candidate by hiring manager that has a match
-    And The user selects "First Name Last Name" manager from the hiring manager dropdown
+    And The user selects "manda user" manager from the hiring manager dropdown
     When User clicks on the search button
     Then Matching records shows up in the records found table  
     

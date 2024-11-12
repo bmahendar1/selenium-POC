@@ -1,30 +1,35 @@
 package stepdefinations.recruitment;
 
 
+import static org.testng.Assert.assertEquals;
+
 import java.util.List;
 import java.util.Set;
 
-import config.initialization.InitDriver;
+import config.initialization.Context;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pages.Recruitment.HiringProcessOfACandidate;
 import pages.Recruitment.TopBar;
 
-public class HiringProcessOfAcandidate {
+public class HiringProcessOfAcandidateSteps {
 	
-	private InitDriver initDriver;
+	private Context context;
 	private TopBar topBar;
+	private HiringProcessOfACandidate hiringProcess;
 
-	public HiringProcessOfAcandidate(InitDriver initDriver) throws Exception {
-		this.initDriver= initDriver;
+	public HiringProcessOfAcandidateSteps(Context context) throws Exception {
+		this.context= context;
 		
-		topBar = new TopBar(this.initDriver.getDriver());
+		topBar = new TopBar(this.context.getDriver());
+		hiringProcess = new HiringProcessOfACandidate(this.context.getDriver());
 	}
 	
 	
 	@When("User clicks on the help button")
 	public void clicks_on_the_help_button() throws Exception {
 		
-//		Actions actions= new Actions(initDriver.getDriver());
+//		Actions actions= new Actions(context.getDriver());
 //		
 ////		actions.moveToElement(topBar.getHelpButton());
 //		actions.contextClick(topBar.getHelpButton()).perform();
@@ -43,11 +48,12 @@ public class HiringProcessOfAcandidate {
 	@Then("User navigates to hiring processing of a candidate page")
 	public void user_navigates_to_hiring_processing_of_a_candidate_page() throws Exception {
 		
-		Set<String> handles = initDriver.getDriver().getWindowHandles();
+		Set<String> handles = context.getDriver().getWindowHandles();
 		List<String> handlesList = handles.stream().toList();
 		
-		initDriver.getDriver().switchTo().window(handlesList.getLast());
+		context.getDriver().switchTo().window(handlesList.getLast());
 		
+		assertEquals(hiringProcess.getHiringProcessTitleTxt(), "Hiring Process of a Candidate");
 		
 		Thread.sleep(5000);
 	}

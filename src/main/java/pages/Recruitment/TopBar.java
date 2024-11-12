@@ -17,8 +17,10 @@ public class TopBar {
 
 	private WebDriver driver;
 	
+	private String vacanciesLocator = "//nav[@aria-label='Topbar Menu']/ul/li[2]";
+
 	private By candidateVisitedNode = By.xpath("//nav[@aria-label='Topbar Menu']/ul/li[1]");
-	private By vacanciesVisitedNode = By.xpath("//nav[@aria-label='Topbar Menu']/ul/li[2]");
+	private By vacanciesVisitedNode = By.xpath(vacanciesLocator);
 	private By helpButton = By.xpath("//button[@title='Help']");
 	
 	
@@ -44,6 +46,11 @@ public class TopBar {
 	
 	public WebElement getVacanciesElement() {
 		return driver.findElement(vacanciesVisitedNode);
+	}
+	
+	
+	public String getVacanciesByLocator() {
+		return vacanciesLocator;
 	}
 	
 	
