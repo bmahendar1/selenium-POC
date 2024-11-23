@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.openqa.selenium.Alert;
@@ -1258,4 +1262,315 @@ public class HerokuappTests {
 		
 		alert.accept();
 	}
+	
+	
+	/**
+	 * Javascript error
+	 */
+	
+	
+	@Given("clicks on the JavaScript onload event error option")
+	public void clicks_on_the_java_script_onload_event_error_option() {
+		
+		context.getDriver().findElement(By.linkText("JavaScript onload event error")).click();
+	}
+	
+	
+	@Then("user navigates to the javascript error page")
+	public void user_navigates_to_the_javascript_error_page() {
+		
+		String javascriptErrorPageUrl = context.getDriver().getCurrentUrl();
+		
+		Assert.assertEquals(javascriptErrorPageUrl, url+"javascript_error", "Javascript error page url doesn't match the expected");
+	}
+	
+	
+	@Then("javascript error displays on the page")
+	public void javascript_error_displays_on_the_page() {
+		
+		String expectedJavascriptErrorTxt = "This page has a JavaScript error in the onload event. This is often a problem to using normal Javascript injection techniques.";
+		String actualJavascriptErrorTxt = context.getDriver().findElement(By.tagName("p")).getText();
+		
+		Assert.assertEquals(actualJavascriptErrorTxt, expectedJavascriptErrorTxt, "The javascript error text does not match");
+	}
+	
+	
+	/**
+	 * Key presses
+	 */
+	
+	@Given("clicks on the Key Presses option")
+	public void clicks_on_the_key_presses_option() {
+		
+		context.getDriver().findElement(By.linkText("Key Presses")).click();
+	}
+	
+	
+	@Then("user navigates to the key presses page")
+	public void user_navigates_to_the_key_presses_page() {
+		
+		String keyPressesPageUrl = context.getDriver().getCurrentUrl();
+		
+		Assert.assertEquals(keyPressesPageUrl, url+"key_presses", "The key presses page url doesn't match expected");
+	}
+	
+	
+	@Then("user types a character into the field")
+	public void user_types_a_character_into_the_field() {
+		
+		try {
+			Robot robot = new Robot();
+			
+			context.getDriver().findElement(By.id("target")).click();
+			
+			robot.keyPress(KeyEvent.VK_M);
+			robot.keyRelease(KeyEvent.VK_M);
+			
+		} catch (AWTException e) {
+			Assert.assertTrue(false, "Encountered AWTException");
+		}
+	}
+	
+	
+	@Then("you entered message will display with the key typed in the field")
+	public void you_entered_message_will_display_with_the_key_typed_in_the_field() {
+		
+		String result = context.getDriver().findElement(By.id("result")).getText();
+
+		Assert.assertEquals(result, "You entered: M", "The result message is wrong.");
+	}
+	
+	
+	@Then("user enters the backspace in the field")
+	public void user_enters_the_backspace_in_the_field() {
+		
+		try {
+			Robot robot = new Robot();
+			
+			robot.keyPress(KeyEvent.VK_BACK_SPACE);
+			robot.keyRelease(KeyEvent.VK_BACK_SPACE);
+			
+		} catch (AWTException e) {
+			Assert.assertTrue(false, "Encountered AWTException");
+		}
+	}
+	
+	
+	@Then("you entered message will display with backspace")
+	public void you_entered_message_will_display_with_backspace() {
+		
+		String resultTxtMsg = context.getDriver().findElement(By.id("result")).getText();
+
+		Assert.assertEquals(resultTxtMsg, "You entered: BACK_SPACE", "The result message is wrong ");
+	}
+	
+	
+	@Then("user types number into the field")
+	public void user_types_number_into_the_field() {
+		
+		try {
+			Robot robot = new Robot();
+			
+			robot.keyPress(KeyEvent.VK_9);
+			robot.keyRelease(KeyEvent.VK_9);
+		} catch (AWTException e) {
+			Assert.assertTrue(false, "Encountered AWTException");
+		}
+	}
+	
+	
+	@Then("you entered message will display with the number typed in the field")
+	public void you_entered_message_will_display_with_the_number_typed_in_the_field() {
+		
+		String resultTxtMsg = context.getDriver().findElement(By.id("result")).getText();
+
+		Assert.assertEquals(resultTxtMsg, "You entered: 9", "The result message is wrong ");
+	}
+	
+	
+	/**
+	 * Multiple windows
+	 */
+	
+	@Given("clicks on the Multiple Windows option")
+	public void clicks_on_the_multiple_windows_option() {
+		
+		context.getDriver().findElement(By.linkText("Multiple Windows")).click();
+	}
+	
+	
+	@Then("user navigates to the multiple windowns page")
+	public void user_navigates_to_the_multiple_windowns_page() {
+		
+		String multipleWindowsPageUrl = context.getDriver().getCurrentUrl();
+		
+		Assert.assertEquals(multipleWindowsPageUrl, url+"windows", "The multiple windows page url does not match the expected");
+	}
+	
+	
+	@Then("user clicks on the click here link")
+	public void user_clicks_on_the_click_here_link() {
+		
+		context.getDriver().findElement(By.partialLinkText("Click ")).click();
+		Utils.sleep(5000);
+	}
+	
+	private Map<String, String> windowsMap;
+	
+	@Then("user will automatically navigate to new window")
+	public void user_will_automatically_navigate_to_new_window() {
+	
+		Set<String> windows = context.getDriver().getWindowHandles();
+		windowsMap = windows.stream()
+				.collect(
+						Collectors.toMap(
+								window -> context.getDriver().switchTo().window(window).getTitle(), 
+								window -> window)
+						);
+		
+		context.getDriver().switchTo().window(windowsMap.get("New Window"));
+		String newWindowTitle = context.getDriver().getTitle();
+
+		Assert.assertEquals(newWindowTitle, "New Window", "The title of new window page does not match expected");
+	}
+	
+	
+	@Then("user navigate back to parent window")
+	public void user_navigate_back_to_parent_window() {
+		
+		String parentWindow = windowsMap.get("The Internet");
+		
+		context.getDriver().switchTo().window(parentWindow);
+		
+		String currentWindowTitle = context.getDriver().getTitle();
+		
+		Assert.assertEquals(currentWindowTitle, "The Internet", "The user did not navigate to parent window");
+		
+//		context.getDriver().switchTo().window(windowsMap.get("New Window")).close();
+	}
+	
+	
+	/**
+	 * Notification messages
+	 */
+	
+	
+	@Given("clicks on the Notification Messages option")
+	public void clicks_on_the_notification_messages_option() {
+		
+		context.getDriver().findElement(By.linkText("Notification Messages")).click();
+	}
+	
+	
+	@Then("user navigates to the notification messages page")
+	public void user_navigates_to_the_notification_messages_page() {
+		
+		String notificationMessagePageUrl = context.getDriver().getCurrentUrl();
+		
+		Assert.assertEquals(notificationMessagePageUrl, url.replace("admin@", "").replace("admin:", "")+"notification_message_rendered", "The notification messages page url does not match expected");
+	}
+	
+	
+	@Then("one of the following messages will shows on the page")
+	public void one_of_the_following_messages_will_shows_on_the_page(List<String> messages) {
+
+		WebElement unsuccessfulMessageWebEle = context.getDriver().findElement(By.id("flash"));
+		
+		JavascriptExecutor jse = (JavascriptExecutor) context.getDriver();
+		
+		String actionMessage = (String) jse.executeScript("return arguments[0].childNodes[0].nodeValue.trim()", unsuccessfulMessageWebEle);
+		
+		Assert.assertListContainsObject(messages, actionMessage, "The "+actionMessage+" is not one of expected");
+	}
+	
+	
+	/**
+	 * Large & Deep Dom
+	 */
+	
+	@Given("clicks on the Large & Deep Dom option")
+	public void clicks_on_the_large_deep_dom_option() {
+		
+		context.getDriver().findElement(By.linkText("Large & Deep DOM")).click();
+	}
+	
+	
+	@Then("user navigates to the large and deep dom page")
+	public void user_navigates_to_the_large_and_deep_dom_page() {
+		
+		String largeAndDeepDomPageUrl = context.getDriver().getCurrentUrl();
+		
+		Assert.assertEquals(largeAndDeepDomPageUrl, url+"large", "Large and deep dom page url doesn't meet expected");
+	}
+	
+	
+	@Then("user reads the value from {string} column and the values meet expected")
+	public void user_reads_the_value_from_column_and_the_values_meet_expected(String columnName) {
+		
+		WebElement largeTable = context.getDriver().findElement(By.id("large-table"));
+		
+		List<WebElement> largeTableHeaders = largeTable.findElements(By.cssSelector("tr > th")); //tr > th:nth-child(1)
+		
+		AtomicInteger columnCounter = new AtomicInteger(1);
+		
+		Map<String, Integer> headerNumbers = largeTableHeaders.stream().collect(
+				Collectors.toMap(
+						header -> header.getText(), 
+						header -> columnCounter.getAndIncrement()
+						)
+				);
+
+		Integer column = headerNumbers.get(columnName);
+		
+		List<WebElement> cells = context.getDriver().findElements(By.cssSelector("tr > td:nth-child("+column+")"));
+		
+		String regex = "^[0-9]+\\."+columnName+"$";
+		Pattern pattern = Pattern.compile(regex);
+		
+		int increment = 1;
+		for(WebElement cell: cells) {
+
+			String cellText = cell.getText();
+			Matcher matcher = pattern.matcher(cellText);
+//			System.out.println(cellText);
+			Assert.assertTrue(matcher.matches(), "The value in the cell doesn't match expected");
+//			System.out.println(cellText.replaceAll("\\.[0-9]+$", ""));
+			Assert.assertEquals(Integer.valueOf(cellText.replaceAll("\\.[0-9]+$", "")), increment++, "The base value doesn't match");
+		}
+	}
+	
+
+	@Then("user reads the value from {string} row and the values meet expected")
+	public void user_reads_the_value_from_row_and_the_values_meet_expected(String rowName) {
+
+		WebElement largeTable = context.getDriver().findElement(By.id("large-table"));
+		
+		List<WebElement> firstColumnCells = largeTable.findElements(By.cssSelector("tr > td:nth-child(1)"));
+		
+		AtomicInteger row = new AtomicInteger(1);
+		
+		Map<String, Integer> firstColumnCellPositions = firstColumnCells.stream()
+				.collect(
+						Collectors.toMap(
+							cell -> cell.getText().replaceAll("\\.[0-9]+$", ""),
+							cell -> row.getAndIncrement()
+							)
+						);
+		
+		Integer rowPosition = firstColumnCellPositions.get(rowName);
+		
+		List<WebElement> rowCells = largeTable.findElements(By.cssSelector("tr:nth-child("+rowPosition+") > td"));
+		
+		int increment = 1;
+		
+		for(WebElement rowCell: rowCells) {
+			
+			String cellText = rowCell.getText();
+//			System.out.println(cellText);
+			Pattern.matches("^"+rowPosition+"\\.[0-9]+$", cellText);
+//			System.out.println(cellText.replaceAll("^[0-9]+\\.", ""));
+			Assert.assertEquals(Integer.valueOf(cellText.replaceAll("^[0-9]+\\.", "")), increment++, "The decimal places are not matching");
+		}
+	}
+
 }

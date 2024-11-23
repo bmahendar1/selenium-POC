@@ -205,3 +205,57 @@ Feature: Herokuapp
   Then js confirm popup displays and user accepts it
   Then user clicks on the js prompt button
   Then js prompt popup displays user enters "This is a Javascript prompt" and accepts it
+  
+  
+  @javascript_error
+  Scenario: Javascript errorKey Presses
+  Given user navigate to the herokuapp menu landing page
+  And clicks on the JavaScript onload event error option
+  Then user navigates to the javascript error page
+  Then javascript error displays on the page
+  
+  
+  @key_presses
+  Scenario: Key presses
+  Given user navigate to the herokuapp menu landing page
+  And clicks on the Key Presses option
+  Then user navigates to the key presses page
+  Then user types a character into the field
+  Then you entered message will display with the key typed in the field
+  Then user enters the backspace in the field
+  Then you entered message will display with backspace
+  Then user types number into the field
+  Then you entered message will display with the number typed in the field
+  
+  
+  @multiple_windows
+  Scenario: Multiple windows
+  Given user navigate to the herokuapp menu landing page
+  And clicks on the Multiple Windows option
+  Then user navigates to the multiple windowns page
+  Then user clicks on the click here link
+  Then user will automatically navigate to new window
+  Then user navigate back to parent window
+  
+  
+  @notification_messages
+  Scenario: Notification messages
+  Given user navigate to the herokuapp menu landing page
+  And clicks on the Notification Messages option
+  Then user navigates to the notification messages page
+  Then one of the following messages will shows on the page
+  	|Action successful|
+  	|Action unsuccesful, please try again|
+  Then user clicks on the click here link
+  Then one of the following messages will shows on the page
+  	|Action successful|
+  	|Action unsuccesful, please try again|
+  	
+  	
+  @large_and_deep_dom
+  Scenario: Large and deep dom
+  Given user navigate to the herokuapp menu landing page
+  And clicks on the Large & Deep Dom option
+  Then user navigates to the large and deep dom page
+  Then user reads the value from "20" column and the values meet expected
+  Then user reads the value from "10" row and the values meet expected

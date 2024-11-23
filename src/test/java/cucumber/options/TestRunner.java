@@ -10,7 +10,7 @@ import io.cucumber.testng.CucumberOptions;
 				"hooks" 
 				},
 		plugin = "json:target/jsonReports/cucumber-report.json",
-		tags = "@herokuapp and @javascript_alerts", //^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+//		tags = "@herokuapp and @large_and_deep_dom", //^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
 		dryRun = false,
 		monochrome = true
 	)
