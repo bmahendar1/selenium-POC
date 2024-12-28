@@ -1,24 +1,25 @@
 package hooks;
 
-import config.initialization.InitDriver;
+import config.initialization.Context;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import stepdefinations.login.LoginSteps;
 
 public class Hooks {
 	
-	private InitDriver initDriver;
+	private Context context;
 	
-	public Hooks(InitDriver driver) {
-		this.initDriver = driver;
+	public Hooks(Context driver) {
+		this.context = driver;
 	}
 
 	@Before(
 			order=1, 
-			value= "not @login_not_required"
+			value= "not @login_not_required and not @herokuapp"
 			)
 	public void login() throws Exception {
-		LoginSteps loginSteps = new LoginSteps(initDriver);
+
+		LoginSteps loginSteps = new LoginSteps(context);
 		
 		loginSteps.user_opens_the_favourite_browser_and_types_url();
 		loginSteps.the_login_page_appears();
@@ -31,7 +32,7 @@ public class Hooks {
 			order=10
 			)
 	public void tearDown() {
-		if(initDriver.getDriver() != null)
-			initDriver.getDriver().close();
+		if(context.getDriver() != null)
+			context.getDriver().close();
 	}
 }

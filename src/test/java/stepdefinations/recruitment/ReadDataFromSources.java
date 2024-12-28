@@ -38,7 +38,7 @@ public class ReadDataFromSources {
 		int firstRowNum= sheet.getFirstRowNum();
 		int lastRowNum= sheet.getLastRowNum();
 		
-		
+//		how to read the data from xlx
 		for(int r=firstRowNum+1; r<=lastRowNum; r++) {
 			
 			XSSFRow row = sheet.getRow(r);

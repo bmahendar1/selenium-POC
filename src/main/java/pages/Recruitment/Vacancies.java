@@ -9,4 +9,5 @@ public class Vacancies {
 	public Vacancies(WebDriver driver) {
 		this.driver = driver;
 	}
+	
 }
