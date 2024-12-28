@@ -1573,4 +1573,387 @@ public class HerokuappTests {
 		}
 	}
 
+	
+	/**
+	 * Sortable data tables
+	 */
+	
+	@Given("clicks on the Sortable Data Tables option")
+	public void clicks_on_the_sortable_data_tables_option() {
+		
+		context.getDriver().findElement(By.linkText("Sortable Data Tables")).click();
+	}
+	
+	
+	@Then("user navigates to the tables page")
+	public void user_navigates_to_the_tables_page() {
+		
+		String tablesPageUrl = context.getDriver().getCurrentUrl();
+		
+		Assert.assertEquals(tablesPageUrl, url+"tables", "The tables page url doesn't match the expected");
+	}
+	
+	
+	@Then("user sorts the data in the example1 table by last name in asc")
+	public void user_sorts_the_data_in_the_example1_table_by_last_name_in_asc() {
+		
+		WebElement table1 = context.getDriver().findElement(By.id("table1"));
+		
+		List<WebElement> headerElements = table1.findElements(By.className("header"));
+		
+		Map<String, WebElement> headerElementsMapper = headerElements.stream()
+						.collect(
+								Collectors.toMap(
+										headerEle -> headerEle.getText(), 
+										headerEle -> headerEle
+										)
+								);
+		
+		AtomicInteger table1Indexer = new AtomicInteger(1);
+		
+		Map<String, Integer> headerIndexMapper = headerElements.stream()
+						.collect(
+								Collectors.toMap(
+										headerEle -> headerEle.getText(), 
+										headerEle -> table1Indexer.getAndIncrement()
+										)
+								);
+
+		WebElement lastNameHeader = headerElementsMapper.get("Last Name");
+		String classAttrValue = lastNameHeader.getAttribute("class");
+		
+		if(!classAttrValue.contains("headerSortDown")) {
+			lastNameHeader.click();			
+		}
+		
+		List<WebElement> lastNameCells = table1.findElements(
+				By.cssSelector("tbody>tr>td:nth-child("+headerIndexMapper.get("Last Name")+")")
+				);
+		List<String> lastNames = lastNameCells.stream().map(cell -> cell.getText()).collect(Collectors.toList());
+		System.out.println(lastNames);
+		Assert.assertTrue(Utils.isSortedAsc(lastNames), "The last names in the example1 table are not sorted in asc");
+	}
+	
+	
+	@Then("user sorts the data in the example1 table by last name in desc")
+	public void user_sorts_the_data_in_the_example1_table_by_last_name_in_desc() {
+		
+		WebElement table1 = context.getDriver().findElement(By.id("table1"));
+		
+		List<WebElement> headers = table1.findElements(By.className("header"));
+		
+		Map<String, WebElement> headerElementsMapper = headers.stream().collect(
+				Collectors.toMap(
+						header -> header.getText(), 
+						header -> header
+						)
+				);
+		
+		AtomicInteger indexer = new AtomicInteger(1);
+		
+		Map<String, Integer> headerElementsIndexes = headers.stream().collect(
+				Collectors.toMap(
+						header -> header.getText(), 
+						header -> indexer.getAndIncrement()
+						)
+				);
+		
+		WebElement lastNameElement = headerElementsMapper.get("Last Name");
+		String lastNameClsAttrValue = lastNameElement.getAttribute("class");
+
+		if(!lastNameClsAttrValue.contains("headerSortUp")) {
+			lastNameElement.click();
+		}
+		List<WebElement> cells = table1.findElements(
+				By.cssSelector("tbody>tr>td:nth-of-type("+headerElementsIndexes.get("Last Name")+")")
+				);
+		List<String> lastNames = cells.stream().map(cell -> cell.getText()).collect(Collectors.toList());
+		System.out.println(lastNames);
+		Assert.assertTrue(Utils.isSortedDesc(lastNames), "The last names in the example 1 table are not sorted in desc");
+	}
+	
+	
+	@Then("user sorts the data in the example1 table by first name in asc")
+	public void user_sorts_the_data_in_the_example1_table_by_first_name_in_asc() {
+		
+		WebElement table1 = context.getDriver().findElement(By.id("table1"));
+		
+		List<WebElement> headerElements = table1.findElements(By.className("header"));
+		
+		Map<String, WebElement> headerElementsMapper = headerElements.stream()
+						.collect(
+								Collectors.toMap(
+										headerEle -> headerEle.getText(), 
+										headerEle -> headerEle
+										)
+								);
+		
+		AtomicInteger table1Indexer = new AtomicInteger(1);
+		
+		Map<String, Integer> headerIndexMapper = headerElements.stream()
+						.collect(
+								Collectors.toMap(
+										headerEle -> headerEle.getText(), 
+										headerEle -> table1Indexer.getAndIncrement()
+										)
+								);
+
+		WebElement firstNameHeader = headerElementsMapper.get("First Name");
+		String firstNameClsAttrValue = firstNameHeader.getAttribute("class");
+		
+		if(!firstNameClsAttrValue.contains("headerSortDown")) {
+			firstNameHeader.click();			
+		}
+		
+		List<WebElement> firstNameCells = table1.findElements(
+				By.cssSelector("tbody>tr>td:nth-child("+headerIndexMapper.get("First Name")+")")
+				);
+		List<String> firstNames = firstNameCells.stream().map(cell -> cell.getText()).collect(Collectors.toList());
+		System.out.println(firstNames);
+		Assert.assertTrue(Utils.isSortedAsc(firstNames), "The first names in the example1 table are not sorted in asc");
+	}
+	
+	
+	@Then("user sorts the data in the example1 table by first name in desc")
+	public void user_sorts_the_data_in_the_example1_table_by_first_name_in_desc() {
+		
+		WebElement table1 = context.getDriver().findElement(By.id("table1"));
+		
+		List<WebElement> headers = table1.findElements(By.className("header"));
+		
+		Map<String, WebElement> headerElementsMapper = headers.stream().collect(
+				Collectors.toMap(
+						header -> header.getText(), 
+						header -> header
+						)
+				);
+		
+		AtomicInteger indexer = new AtomicInteger(1);
+		
+		Map<String, Integer> headerElementsIndexes = headers.stream().collect(
+				Collectors.toMap(
+						header -> header.getText(), 
+						header -> indexer.getAndIncrement()
+						)
+				);
+		
+		WebElement firstNameElement = headerElementsMapper.get("First Name");
+		String lastNameClsAttrValue = firstNameElement.getAttribute("class");
+
+		if(!lastNameClsAttrValue.contains("headerSortUp")) {
+			firstNameElement.click();
+		}
+		List<WebElement> cells = table1.findElements(
+				By.cssSelector("tbody>tr>td:nth-of-type("+headerElementsIndexes.get("First Name")+")")
+				);
+		List<String> firstNames = cells.stream().map(cell -> cell.getText()).collect(Collectors.toList());
+		System.out.println(firstNames);
+		Assert.assertTrue(Utils.isSortedDesc(firstNames), "The first names in the example 1 table are not sorted in desc");
+	}
+	
+	
+	@Then("user sorts the data in the example1 table by email in asc")
+	public void user_sorts_the_data_in_the_example1_table_by_email_in_asc() {
+		
+		WebElement table1 = context.getDriver().findElement(By.id("table1"));
+		
+		List<WebElement> headerElements = table1.findElements(By.className("header"));
+		
+		Map<String, WebElement> headerElementsMapper = headerElements.stream()
+						.collect(
+								Collectors.toMap(
+										headerEle -> headerEle.getText(), 
+										headerEle -> headerEle
+										)
+								);
+		
+		AtomicInteger table1Indexer = new AtomicInteger(1);
+		
+		Map<String, Integer> headerIndexMapper = headerElements.stream()
+						.collect(
+								Collectors.toMap(
+										headerEle -> headerEle.getText(), 
+										headerEle -> table1Indexer.getAndIncrement()
+										)
+								);
+
+		WebElement emailHeader = headerElementsMapper.get("Email");
+		String emailClsAttrValue = emailHeader.getAttribute("class");
+		
+		if(!emailClsAttrValue.contains("headerSortDown")) {
+			emailHeader.click();			
+		}
+		
+		List<WebElement> emailCells = table1.findElements(
+				By.cssSelector("tbody>tr>td:nth-child("+headerIndexMapper.get("Email")+")")
+				);
+		List<String> emails = emailCells.stream().map(cell -> cell.getText()).collect(Collectors.toList());
+		System.out.println(emails);
+		Assert.assertTrue(Utils.isSortedAsc(emails), "The emails in the example1 table are not sorted in asc");
+	}
+	
+	
+	@Then("user sorts the data in the example1 table by email in desc")
+	public void user_sorts_the_data_in_the_example1_table_by_email_in_desc() {
+		
+		WebElement table1 = context.getDriver().findElement(By.id("table1"));
+		
+		List<WebElement> headers = table1.findElements(By.className("header"));
+		
+		Map<String, WebElement> headerElementsMapper = headers.stream().collect(
+				Collectors.toMap(
+						header -> header.getText(), 
+						header -> header
+						)
+				);
+		
+		AtomicInteger indexer = new AtomicInteger(1);
+		
+		Map<String, Integer> headerElementsIndexes = headers.stream().collect(
+				Collectors.toMap(
+						header -> header.getText(), 
+						header -> indexer.getAndIncrement()
+						)
+				);
+		
+		WebElement emailElement = headerElementsMapper.get("Email");
+		String lastNameClsAttrValue = emailElement.getAttribute("class");
+
+		if(!lastNameClsAttrValue.contains("headerSortUp")) {
+			emailElement.click();
+		}
+		List<WebElement> cells = table1.findElements(
+				By.cssSelector("tbody>tr>td:nth-of-type("+headerElementsIndexes.get("Email")+")")
+				);
+		List<String> emails = cells.stream().map(cell -> cell.getText()).collect(Collectors.toList());
+		System.out.println(emails);
+		Assert.assertTrue(Utils.isSortedDesc(emails), "The emails in the example 1 table are not sorted in desc");
+	}
+	
+
+	@Then("user sorts the data in the example1 table by due in asc")
+	public void user_sorts_the_data_in_the_example1_table_by_due_in_asc() {
+		
+		WebElement table1 = context.getDriver().findElement(By.id("table1"));
+		
+		List<WebElement> headerElements = table1.findElements(By.className("header"));
+		
+		Map<String, WebElement> headerElementsMapper = headerElements.stream()
+						.collect(
+								Collectors.toMap(
+										headerEle -> headerEle.getText(), 
+										headerEle -> headerEle
+										)
+								);
+		
+		AtomicInteger table1Indexer = new AtomicInteger(1);
+		
+		Map<String, Integer> headerIndexMapper = headerElements.stream()
+						.collect(
+								Collectors.toMap(
+										headerEle -> headerEle.getText(), 
+										headerEle -> table1Indexer.getAndIncrement()
+										)
+								);
+
+		WebElement dueHeader = headerElementsMapper.get("Due");
+		String dueClsAttrValue = dueHeader.getAttribute("class");
+		
+		if(!dueClsAttrValue.contains("headerSortDown")) {
+			dueHeader.click();			
+		}
+		
+		List<WebElement> dueCells = table1.findElements(
+				By.cssSelector("tbody>tr>td:nth-child("+headerIndexMapper.get("Due")+")")
+				);
+		List<Float> dues = dueCells.stream().map(cell -> Float.valueOf(cell.getText().replaceFirst("^\\$", ""))).collect(Collectors.toList());
+		System.out.println(dues);
+		Assert.assertTrue(Utils.isSortedAsc(dues), "The dues in the example1 table are not sorted in asc");
+	}
+	
+	
+	@Then("user sorts the data in the example1 table by due in desc")
+	public void user_sorts_the_data_in_the_example1_table_by_due_in_desc() {
+		
+		WebElement table1 = context.getDriver().findElement(By.id("table1"));
+		
+		List<WebElement> headers = table1.findElements(By.className("header"));
+		
+		Map<String, WebElement> headerElementsMapper = headers.stream().collect(
+				Collectors.toMap(
+						header -> header.getText(), 
+						header -> header
+						)
+				);
+		
+		AtomicInteger indexer = new AtomicInteger(1);
+		
+		Map<String, Integer> headerElementsIndexes = headers.stream().collect(
+				Collectors.toMap(
+						header -> header.getText(), 
+						header -> indexer.getAndIncrement()
+						)
+				);
+		
+		WebElement dueElement = headerElementsMapper.get("Due");
+		String dueClsAttrValue = dueElement.getAttribute("class");
+
+		if(!dueClsAttrValue.contains("headerSortUp")) {
+			dueElement.click();
+		}
+		List<WebElement> cells = table1.findElements(
+				By.cssSelector("tbody>tr>td:nth-of-type("+headerElementsIndexes.get("Due")+")")
+				);
+		List<Float> dues = cells.stream().map(cell -> Float.valueOf(cell.getText().replaceFirst("^\\$", ""))).collect(Collectors.toList());
+		System.out.println(dues);
+		Assert.assertTrue(Utils.isSortedDesc(dues), "The dues in the example 1 table are not sorted in desc");
+	}
+	
+	
+	
+	/**
+	 * Shadow DOM
+	 */
+	
+	@Given("clicks on the Shadow DOM option")
+	public void clicks_on_the_shadow_dom_option() {
+		
+		context.getDriver().findElement(By.linkText("Shadow DOM")).click();
+	}
+	
+	
+	@Then("user navigates to the shadown dom page")
+	public void user_navigates_to_the_shadown_dom_page() {
+		
+		String shadowDOMPageUrl = context.getDriver().getCurrentUrl();
+		
+		Assert.assertEquals(shadowDOMPageUrl, url+"shadowdom", "Shadowdom page url does not match the expected");
+	}
+	
+	
+	@Then("user reads the text from shadow doms")
+	public void user_reads_the_text_from_first_shadow_dom() {
+		
+		List<WebElement> shadowHosts = context.getDriver().findElements(By.tagName("my-paragraph"));
+		
+		JavascriptExecutor javascriptExecutor = (JavascriptExecutor) context.getDriver();
+		
+		for(WebElement shadowHost: shadowHosts) {
+			
+			String slotText = (String) javascriptExecutor.executeScript(
+					"let shadowRoot = arguments[0].shadowRoot; " +
+							"let slot = shadowRoot.querySelector('slot[name=\"my-text\"]'); " +
+							"if (slot) { " +
+							"  let assignedNodes = slot.assignedNodes({flatten: true}); " +
+							"  return assignedNodes.map(node => node.textContent.trim()).join(' '); " +
+							"} else { " +
+							"  return null; " +
+							"}",
+							shadowHost
+					);
+			
+			System.out.println(slotText);
+		}
+		
+	}
 }

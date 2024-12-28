@@ -259,3 +259,26 @@ Feature: Herokuapp
   Then user navigates to the large and deep dom page
   Then user reads the value from "20" column and the values meet expected
   Then user reads the value from "10" row and the values meet expected
+  
+  
+  @sortable_data_tables
+  Scenario: Sortable data tables
+  Given user navigate to the herokuapp menu landing page
+  And clicks on the Sortable Data Tables option
+  Then user navigates to the tables page
+  Then user sorts the data in the example1 table by last name in asc
+  Then user sorts the data in the example1 table by last name in desc
+  Then user sorts the data in the example1 table by first name in asc
+  Then user sorts the data in the example1 table by first name in desc
+  Then user sorts the data in the example1 table by email in asc
+  Then user sorts the data in the example1 table by email in desc
+  Then user sorts the data in the example1 table by due in asc
+  Then user sorts the data in the example1 table by due in desc
+  
+  
+  @shadow_dom
+  Scenario: Show dom
+  Given user navigate to the herokuapp menu landing page
+  And clicks on the Shadow DOM option
+  Then user navigates to the shadown dom page
+  Then user reads the text from shadow doms

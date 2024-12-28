@@ -10,9 +10,9 @@ import io.cucumber.testng.CucumberOptions;
 				"hooks" 
 				},
 		plugin = "json:target/jsonReports/cucumber-report.json",
-//		tags = "@herokuapp and @large_and_deep_dom", //^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+		//tags = "@mailosaur and @read_email_from_outbox", //^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
 		dryRun = false,
-		monochrome = true
+		monochrome = true//UalFSzJZP4VNVEvRhkwdus3P4IRVQTDf
 	)
 public class TestRunner extends AbstractTestNGCucumberTests {
 //	List<String> windowTitles = driver.getWindowHandles()

@@ -35,6 +35,7 @@ public class Utils {
 	}
 	
 	public static List<String[]> readCSV(String filePath) throws IOException {
+		
         List<String[]> data = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -68,5 +69,25 @@ public class Utils {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static <T extends Comparable<T>> boolean isSortedAsc(List<T> items) {
+		
+		for(int i=0; i<items.size() - 1; i++) {
+			if(!(items.get(i).compareTo(items.get(i+1)) <= 0)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static <T extends Comparable<T>> boolean isSortedDesc(List<T> items) {
+		
+		for(int i=0; i<items.size() - 1; i++) {
+			if(!(items.get(i).compareTo(items.get(i+1)) >= 0)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
