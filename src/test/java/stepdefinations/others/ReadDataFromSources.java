@@ -1,4 +1,4 @@
-package stepdefinations.recruitment;
+package stepdefinations.others;
 
 import java.io.File;
 import java.io.FileInputStream;
