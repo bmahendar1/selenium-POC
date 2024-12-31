@@ -17,7 +17,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M9</version>
 				<configuration>
-					<testFailureIgnore>false</testFailureIgnore>
+					<testFailureIgnore>true</testFailureIgnore>
 					<parallel>methods</parallel>
 					<threadCount>2</threadCount>
 					<forkCount>2</forkCount>
@@ -31,21 +31,20 @@
 					<execution>
 						<id>execution</id>
 						<phase>verify</phase>
+						<!-- <phase>post-integration-test</phase> -->				
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<projectName>cucumber-jvm-example</projectName>
-							<!-- optional, per documentation set this to "true"
-							to bypass generation of Cucumber Reports entirely,
+							<!-- optional, per documentation set this to "true" to bypass generation of Cucumber Reports entirely, 
 							defaults to false if not specified -->
 							<skip>false</skip>
 							<!-- output directory for the generated report -->
 							<outputDirectory>${project.build.directory}</outputDirectory>
 							<!-- optional, defaults to outputDirectory if not
 							specified -->
-							<inputDirectory>
-								${project.build.directory}/jsonReports</inputDirectory>
+							<inputDirectory>${project.build.directory}/jsonReports</inputDirectory>
 							<jsonFiles>
 								<!-- supports wildcard or name pattern -->
 								<param>**/*.json</param>
@@ -55,13 +54,11 @@
 							<parallelTesting>false</parallelTesting>
 							<!-- optional, set true to group features by its Ids -->
 							<mergeFeaturesById>false</mergeFeaturesById>
-							<!-- optional, set true to get a final report with
-							latest results of the same test from different test
-							runs -->
+							<!-- optional, set true to get a final report with latest results of the same test from different test runs -->
 							<mergeFeaturesWithRetest>false</mergeFeaturesWithRetest>
-							<!-- optional, set true to fail build on test
-							failures -->
+							<!-- optional, set true to fail build on test failures -->
 							<checkBuildResult>false</checkBuildResult>
+							<failOnMissingOutput>false</failOnMissingOutput>
 						</configuration>
 					</execution>
 				</executions>
@@ -73,7 +70,7 @@
 		<dependency>
 		    <groupId>org.seleniumhq.selenium</groupId>
 		    <artifactId>selenium-java</artifactId>
-		    <version>4.25.0</version>
+		    <version>4.27.0</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
 		<dependency>

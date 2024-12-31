@@ -9,7 +9,7 @@ import io.cucumber.testng.CucumberOptions;
 				"hooks" 
 				},
 		plugin = "json:target/jsonReports/cucumber-report.json",
-		//tags = "@basic_auth", //^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+//		tags = "@read_data_from_sources", //^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
 		dryRun = false,
 		monochrome = true//UalFSzJZP4VNVEvRhkwdus3P4IRVQTDf
 	)
