@@ -10,7 +10,7 @@ public class ConfigLoader {
     public ConfigLoader() {
 
         String env = System.getProperty("env", "dev"); // Default to 'dev'
-        System.out.println("ENV: "+env);
+        System.out.println("Running tests in env: "+env);
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("config-" + env + ".properties")) {
             if (input == null) {
                 throw new RuntimeException("Could not find config file for environment: " + env);

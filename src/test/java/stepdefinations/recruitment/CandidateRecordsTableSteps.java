@@ -23,7 +23,7 @@ public class CandidateRecordsTableSteps {
 	
 	private Context context;
 	private CandidateRecordsFoundTable recordsFoundTbl;
-	private long explicitWait;
+	private long eWaitSec;
 	private WebDriverWait wait;
 	private JavascriptExecutor jse;
 	
@@ -32,9 +32,8 @@ public class CandidateRecordsTableSteps {
 	public CandidateRecordsTableSteps(Context context) throws Exception {
 		this.context= context;
 		this.recordsFoundTbl= new CandidateRecordsFoundTable(this.context.getDriver());
-//		this.explicitWait= Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		this.explicitWait= (Long) context.getOptions().get("explicitWait");
-		this.wait= new WebDriverWait(context.getDriver(), Duration.ofMillis(explicitWait));
+		this.eWaitSec= (Long) context.getOptions().get("explicitWait");
+		this.wait= new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 	}
 	
 	

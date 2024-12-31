@@ -18,19 +18,19 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import config.initialization.DataFiles;
 
 public class ReadDataFromSources {
-	private File f;
+	private File file;
 
 	@Given("User has the excel file")
 	public void user_has_the_excel_file() throws Exception {
 		
-		f= new File(DataFiles.BULK_DATA_FILE_PATH);
+		file= new File(DataFiles.BULK_DATA_FILE_PATH);
 	}
 	
 	
 	@When("The user reads the date, it reads properly")
 	public void the_user_reads_the_date_it_reads_properly() throws Exception {
 		
-		FileInputStream fis= new FileInputStream(f);
+		FileInputStream fis= new FileInputStream(file);
 		
 		XSSFWorkbook workBook= new XSSFWorkbook(fis);
 		XSSFSheet sheet= workBook.getSheet("Sheet1");
@@ -84,7 +84,7 @@ public class ReadDataFromSources {
 	
 	@When("The user updates the execution date in the document")
 	public void the_user_updates_the_execution_date_in_the_document() throws Exception {
-		FileInputStream fis= new FileInputStream(f);
+		FileInputStream fis= new FileInputStream(file);
 		
 		XSSFWorkbook workBook= new XSSFWorkbook(fis);
 		XSSFSheet sheet= workBook.getSheet("Sheet1");

@@ -46,12 +46,12 @@ public class Candidates {
 	
 	private WebDriver driver;
 	private Context context;
-	private Long explicitWait;
+	private Long eWaitSec;
 	
 	public Candidates(WebDriver driver, Context context) {
 		this.driver = driver;
 		this.context = context;
-		this.explicitWait = (Long) context.getOptions().get("explicitWait");
+		this.eWaitSec = (Long) context.getOptions().get("explicitWait");
 	}
 	
 	
@@ -137,7 +137,7 @@ public class Candidates {
 	
 	public void selectOptionFromCandidateNameHints() throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 		
 		wait.until(new ExpectedCondition<Boolean>(){
 
@@ -201,7 +201,7 @@ public class Candidates {
 	
 	private void clickOnMonthDropdown() throws Exception {
 		
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 		
 		wait.until(ExpectedConditions.elementToBeClickable(calenderMonthDropdown));
 		driver.findElement(calenderMonthDropdown).click();
@@ -210,7 +210,7 @@ public class Candidates {
 	
 	private void selectMonth(String month) throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 		
 		By monthLocator = By.xpath(monthOption.replace("{MONTH}", month));
 		
@@ -221,7 +221,7 @@ public class Candidates {
 	
 	private void clickOnYearDropdown() throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 		
 		wait.until(ExpectedConditions.elementToBeClickable(calenderYearDropdown));
 		driver.findElement(calenderYearDropdown).click();
@@ -230,7 +230,7 @@ public class Candidates {
 	
 	private void selectYear(int year) throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 		
 		By yearLocator = By.xpath(yearOption.replace("{YEAR}", Integer.toString(year)));
 		
@@ -241,7 +241,7 @@ public class Candidates {
 	
 	private void selectDate(int date) throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 		
 		By dateLocator = By.xpath(dateOption.replace("{DATE}", Integer.toString(date)));
 		
@@ -258,7 +258,7 @@ public class Candidates {
 	
 	public boolean infoPopupDisplayed() throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 		
 		wait.until(ExpectedConditions.visibilityOf(driver.findElement(infoPopup)));
 		
@@ -307,7 +307,7 @@ public class Candidates {
 	
 	private List<WebElement> getCells(By location) throws Exception {
 		
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait), null);
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec), null);
 		
 		List<WebElement> cells = driver.findElements(location);
 		wait.until(ExpectedConditions.visibilityOfAllElements(cells));

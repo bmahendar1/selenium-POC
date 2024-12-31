@@ -1,5 +1,6 @@
 package stepdefinations.herokuapp;
 
+import config.initialization.ConfigLoader;
 import config.initialization.Context;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -42,11 +43,14 @@ public class HerokuappTests {
 	
 	private Context context;
 	private String url = "https://admin:admin@the-internet.herokuapp.com/";
-	private long explicitWait;
+	private long eWaitSec;
+	private ConfigLoader configLoader;
+	
 	
 	public HerokuappTests(Context context) {
 		this.context = context;
-		this.explicitWait = 4000;
+		this.configLoader = new ConfigLoader();
+		this.eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
 	}
 	
 	
@@ -54,7 +58,7 @@ public class HerokuappTests {
 		
 		WebDriver driver = new ChromeDriver();		
 		context.setDriver(driver);
-		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(explicitWait));
+		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 	}
 	
 	
@@ -62,7 +66,7 @@ public class HerokuappTests {
 		
 		WebDriver driver = new ChromeDriver(options);
 		context.setDriver(driver);
-		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(explicitWait));
+		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 	}
 
 	/**
@@ -1040,6 +1044,7 @@ public class HerokuappTests {
 			Assert.assertEquals(username, "name: user"+userId, "The username does not match expected");
 			
 			
+			@SuppressWarnings("deprecation")
 			String hrefValue = figcaptionElement.findElement(By.tagName("a")).getAttribute("href");
 			Assert.assertEquals(hrefValue, url+"users/"+userId, "The link does not match expected");
 			
@@ -1131,6 +1136,7 @@ public class HerokuappTests {
 		
 		WebElement fileElement = downloadFileElements.get(randomFileIndex);
 		
+		@SuppressWarnings("deprecation")
 		String hrefValue = fileElement.findElement(By.tagName("a")).getAttribute("href");
 		String fileName = hrefValue.replaceAll(".*/", "");
 		System.out.println(fileName);
@@ -1620,6 +1626,7 @@ public class HerokuappTests {
 								);
 
 		WebElement lastNameHeader = headerElementsMapper.get("Last Name");
+		@SuppressWarnings("deprecation")
 		String classAttrValue = lastNameHeader.getAttribute("class");
 		
 		if(!classAttrValue.contains("headerSortDown")) {
@@ -1659,6 +1666,7 @@ public class HerokuappTests {
 				);
 		
 		WebElement lastNameElement = headerElementsMapper.get("Last Name");
+		@SuppressWarnings("deprecation")
 		String lastNameClsAttrValue = lastNameElement.getAttribute("class");
 
 		if(!lastNameClsAttrValue.contains("headerSortUp")) {
@@ -1699,6 +1707,7 @@ public class HerokuappTests {
 								);
 
 		WebElement firstNameHeader = headerElementsMapper.get("First Name");
+		@SuppressWarnings("deprecation")
 		String firstNameClsAttrValue = firstNameHeader.getAttribute("class");
 		
 		if(!firstNameClsAttrValue.contains("headerSortDown")) {
@@ -1738,6 +1747,7 @@ public class HerokuappTests {
 				);
 		
 		WebElement firstNameElement = headerElementsMapper.get("First Name");
+		@SuppressWarnings("deprecation")
 		String lastNameClsAttrValue = firstNameElement.getAttribute("class");
 
 		if(!lastNameClsAttrValue.contains("headerSortUp")) {
@@ -1778,6 +1788,7 @@ public class HerokuappTests {
 								);
 
 		WebElement emailHeader = headerElementsMapper.get("Email");
+		@SuppressWarnings("deprecation")
 		String emailClsAttrValue = emailHeader.getAttribute("class");
 		
 		if(!emailClsAttrValue.contains("headerSortDown")) {
@@ -1817,6 +1828,7 @@ public class HerokuappTests {
 				);
 		
 		WebElement emailElement = headerElementsMapper.get("Email");
+		@SuppressWarnings("deprecation")
 		String lastNameClsAttrValue = emailElement.getAttribute("class");
 
 		if(!lastNameClsAttrValue.contains("headerSortUp")) {
@@ -1857,6 +1869,7 @@ public class HerokuappTests {
 								);
 
 		WebElement dueHeader = headerElementsMapper.get("Due");
+		@SuppressWarnings("deprecation")
 		String dueClsAttrValue = dueHeader.getAttribute("class");
 		
 		if(!dueClsAttrValue.contains("headerSortDown")) {
@@ -1896,6 +1909,7 @@ public class HerokuappTests {
 				);
 		
 		WebElement dueElement = headerElementsMapper.get("Due");
+		@SuppressWarnings("deprecation")
 		String dueClsAttrValue = dueElement.getAttribute("class");
 
 		if(!dueClsAttrValue.contains("headerSortUp")) {

@@ -1,7 +1,5 @@
 package pages.login;
 
-import static utils.Utils.getProperty;
-
 import java.time.Duration;
 
 import org.openqa.selenium.By;
@@ -9,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import config.initialization.DataFiles;
+import config.initialization.ConfigLoader;
 
 public class LoginPage {
 
@@ -20,6 +18,10 @@ public class LoginPage {
 	private By loginText = By.xpath("//h5[text()='Login']");
 	private By alertMessage = By.xpath("//div[@role='alert']/div/p");
 	
+	private ConfigLoader configLoader;
+	private long secondsE;
+	private long secondsI;
+	
 	
 	private WebDriverWait wait;
 	
@@ -27,15 +29,17 @@ public class LoginPage {
 	public LoginPage (WebDriver driver) throws Exception {
 		this.driver = driver;
 		
-		long milliSecs = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		wait= new WebDriverWait(driver, Duration.ofMillis(milliSecs));
+		this.configLoader = new ConfigLoader();
+//		long secondsE = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
+		secondsE = Long.valueOf(configLoader.getProperty("explicitWait"));
+		wait= new WebDriverWait(driver, Duration.ofMillis(secondsE));
+		
+		secondsI = Long.valueOf(configLoader.getProperty("implicitWait"));
 	}
 
 	public void setUsername(String username) throws Exception {
 		
-		long seconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "implicitWait"));
-		
-		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(seconds));
+		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(secondsI));
 		driver.findElement(usernameElement).sendKeys(username);
 	}
 

@@ -1,6 +1,5 @@
 package pages.dashboard;
 
-import static utils.Utils.getProperty;
 
 import java.time.Duration;
 
@@ -10,7 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import config.initialization.DataFiles;
+import config.initialization.ConfigLoader;
+
 
 public class Dashboard {
 
@@ -21,16 +21,21 @@ public class Dashboard {
 	
 	
 	private WebDriver driver;
-	private long seconds;
+	private long iWaitSec;
+	private long eWaitSec;
+	private ConfigLoader configLoader;
+	
 	
 	public Dashboard(WebDriver driver) {
 		this.driver = driver;
+		this.configLoader = new ConfigLoader();
+		this.iWaitSec = Long.valueOf(configLoader.getProperty("implicitWait"));
+		this.eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
 	}
 	
 	public String getDashboardText() throws Exception {
 		
-		seconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "implicitWait"));
-		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(seconds));
+		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(iWaitSec));
 		
 		return driver.findElement(dashboardText).getText();
 	}
@@ -41,10 +46,9 @@ public class Dashboard {
 	
 	public boolean dropdownMenuDisplayed() throws Exception {
 		
-		long explicitWait = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "implicitWait"));
 		WebElement element = driver.findElement(userDropdownMenu);
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(explicitWait));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 		wait.until(ExpectedConditions.visibilityOf(element));
 		
 		return element.isDisplayed();

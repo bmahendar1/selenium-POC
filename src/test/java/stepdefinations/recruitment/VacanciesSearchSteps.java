@@ -3,14 +3,11 @@ package stepdefinations.recruitment;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import config.initialization.Context;
 import io.cucumber.java.en.Given;
-import pages.Recruitment.Candidates;
 import pages.Recruitment.TopBar;
 
 
@@ -18,15 +15,15 @@ public class VacanciesSearchSteps {
 
 	private Context context;
 	private TopBar topBar;
-	private Long explicitWait;
+	private Long eWaitSec;
 	private WebDriverWait wait;
 	
 	
 	public VacanciesSearchSteps(Context context) throws Exception {
 		this.context = context;
 		this.topBar = new TopBar(context.getDriver());
-		this.explicitWait = (Long) context.getOptions().get("explicitWait");
-		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(explicitWait));
+		this.eWaitSec = (Long) context.getOptions().get("explicitWait");
+		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 	}
 	
 	@Given("User clicks on vacancies header and navigate to vacancies tab")

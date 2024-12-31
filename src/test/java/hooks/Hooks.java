@@ -1,5 +1,7 @@
 package hooks;
 
+import java.util.Set;
+
 import config.initialization.Context;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -32,7 +34,14 @@ public class Hooks {
 			order=10
 			)
 	public void tearDown() {
-		if(context.getDriver() != null)
-			context.getDriver().close();
+		if(context.getDriver() != null) {
+			Set<String> windows = context.getDriver().getWindowHandles();
+			
+			for(String windowId: windows) {				
+//				context.getDriver().close();
+				context.getDriver().switchTo().window(windowId).close();
+			}
+		}
 	}
+	
 }

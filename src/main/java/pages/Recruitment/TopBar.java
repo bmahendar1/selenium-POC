@@ -7,9 +7,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import config.initialization.DataFiles;
+import config.initialization.ConfigLoader;
 
-import static utils.Utils.*;
 
 import java.time.Duration;
 
@@ -25,11 +24,15 @@ public class TopBar {
 	
 	
 	private WebDriverWait wait;
+	private long eWaitSec;
+	private ConfigLoader configLoader;
 	
 	public TopBar(WebDriver driver) throws Exception {
 		this.driver = driver;
-		long milliSeconds = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		wait = new WebDriverWait(driver, Duration.ofMillis(milliSeconds));
+		this.configLoader = new ConfigLoader();
+		
+		eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
+		wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 	}
 
 	public WebElement getCandidateElement() throws Exception {
