@@ -1,5 +1,6 @@
 package stepdefinations.recruitment;
 
+import config.initialization.ConfigLoader;
 import config.initialization.Context;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
@@ -17,6 +18,7 @@ import static org.testng.Assert.assertTrue;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -28,22 +30,24 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.helpers.Reporter;
 
 public class CandidatesSearchSteps {
 
 	private Context context;
+	private ConfigLoader configLoader;
 	private Candidates candidates;
-//	private Scenario scenario;
 	private TopBar topBar;
 	private WebDriverWait wait;
-	private Long explicitWait;
-	private Collection<String> tags;
+	private Long eWaitSec;
+	private Collection<String> tags = new ArrayList<>();
 
 	public CandidatesSearchSteps(Context context) throws Exception {
 		this.context = context;
+		this.configLoader = new ConfigLoader();
 
-		this.explicitWait = (Long) context.getOptions().getOrDefault("explicitWait", 0);
-		wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(explicitWait));
+		this.eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
+		wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		candidates = new Candidates(context.getDriver(), context);
 
 		topBar = new TopBar(context.getDriver());
@@ -53,8 +57,15 @@ public class CandidatesSearchSteps {
 	public void setScenario(Scenario scenario) {
 		
 		tags = scenario.getSourceTagNames();
+		
+		if(tags == null || tags.isEmpty()) {
+			System.out.println("The tags are null or empty.");
+		} else {
+			System.out.println("tags are "+tags);
+		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void preCheckUps() throws Exception {
 		if (!topBar.getCandidateElement().getAttribute("class").endsWith("--visited")) {
 
@@ -81,6 +92,7 @@ public class CandidatesSearchSteps {
 
 		wait.until(new ExpectedCondition<Boolean>() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public Boolean apply(WebDriver input) {
 				return candidates.getJobTitleDropdown().getAttribute("class").endsWith("--focus");
@@ -102,6 +114,7 @@ public class CandidatesSearchSteps {
 
 		wait.until(new ExpectedCondition<Boolean>() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public Boolean apply(WebDriver input) {
 				return candidates.getVacancyDropdown().getAttribute("class").endsWith("--focus");
@@ -122,6 +135,7 @@ public class CandidatesSearchSteps {
 
 		wait.until(new ExpectedCondition<Boolean>() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public Boolean apply(WebDriver input) {
 				return candidates.getHiringManagerDropdown().getAttribute("class").endsWith("--focus");
@@ -143,6 +157,7 @@ public class CandidatesSearchSteps {
 
 		wait.until(new ExpectedCondition<Boolean>() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public Boolean apply(WebDriver input) {
 				return candidates.getStatusDropdown().getAttribute("class").endsWith("--focus");
@@ -277,9 +292,10 @@ public class CandidatesSearchSteps {
 
 		Thread.sleep(2000);
 
-		WebDriverWait wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(explicitWait));
+		WebDriverWait wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		boolean doesCandidateTabDefault = wait.until(new ExpectedCondition<Boolean>() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public Boolean apply(WebDriver input) {
 				String classAttrTxt;

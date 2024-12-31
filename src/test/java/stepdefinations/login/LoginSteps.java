@@ -28,15 +28,15 @@ public class LoginSteps {
 	private LoginPage login;
 	private Context context;
 	private ConfigLoader configLoader;
-	private Long implicitWait;
-	private Long explicitWait;
+	private Long iWaitSec;
+	private Long eWaitSec;
 	
 	
 	public LoginSteps(Context context) throws Exception {
 		this.context = context;
 		this.configLoader = new ConfigLoader();
-		this.implicitWait = Long.valueOf(configLoader.getProperty("implicitWait"));
-		this.explicitWait = Long.valueOf(configLoader.getProperty("explicitWait"));
+		this.iWaitSec = Long.valueOf(configLoader.getProperty("implicitWait"));
+		this.eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
 	}
 	
 
@@ -50,9 +50,6 @@ public class LoginSteps {
 		String url = configLoader.getProperty("url");
 		
 		context.setOption("url", url);
-		
-//		String browser = getProperty(DataFiles.CONFIG_FILE_PATH, "browser");
-//		String url = getProperty(DataFiles.CONFIG_FILE_PATH, "url");
 		
 		if(browser.equalsIgnoreCase("chrome")) {
 			
@@ -91,8 +88,8 @@ public class LoginSteps {
 		context.setDriver(driver);
 		context.getDriver().manage().window().maximize();
 		context.getDriver().get(url);
-		context.setOption("implicitWait", implicitWait);
-		context.setOption("explicitWait", explicitWait);
+		context.setOption("implicitWait", iWaitSec);
+		context.setOption("explicitWait", eWaitSec);
 	}
 	
 	@Given("The login page appears")
@@ -104,15 +101,11 @@ public class LoginSteps {
 		String loginText = login.getLoginTextOnLoginPage();
 		
 		assertEquals(loginText, "Login", "The login text doesn't match.");
-//		assertEquals(url, "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login", "The login page url doesn't match");
 		assertEquals(url, context.getOptions().get("url"), "The login page url doesn't match");
 	}
 	
 	@When("User enters username, password and clicks on login")
 	public void user_enters_username_password_and_clicks_on_login() throws Exception {
-		
-//		String username = getProperty(DataFiles.CONFIG_FILE_PATH, "username");
-//		String password = getProperty(DataFiles.CONFIG_FILE_PATH, "password");
 		
 		String username = configLoader.getProperty("username");
 		String password = configLoader.getProperty("password");
@@ -149,17 +142,18 @@ public class LoginSteps {
 		
 		Dashboard dashboard = new Dashboard(context.getDriver());
 
+		@SuppressWarnings("deprecation")
 		String initialValue = dashboard.getUserDropdownMenuElement().getAttribute("class");
 		
 		dashboard.clickOnUserDropdownTab();
 		
-//		long explicitWait = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "explicitWait"));
-		WebDriverWait webDriverWait = new WebDriverWait(context.getDriver(), Duration.ofMillis(explicitWait));
+		WebDriverWait webDriverWait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		
 		boolean isUserDropdownActive = webDriverWait.until(new ExpectedCondition<Boolean>() {
 
 			@Override
 			public Boolean apply(WebDriver input) {
+				@SuppressWarnings("deprecation")
 				String currentValue = dashboard.getUserDropdownMenuElement().getAttribute("class");
 				
 				return !initialValue.equals(currentValue) && currentValue.equals("--active "+initialValue);
@@ -174,12 +168,9 @@ public class LoginSteps {
 			UserDropdownTabOptions userDropdownTabOptions = new UserDropdownTabOptions(context.getDriver());
 			userDropdownTabOptions.clickOnLogoutOption();
 			
-//			long implicitWait = Long.valueOf(getProperty(DataFiles.CONFIG_FILE_PATH, "implicitWait"));
-			
-			context.getDriver().manage().timeouts().implicitlyWait(Duration.ofMillis(implicitWait));
+			context.getDriver().manage().timeouts().implicitlyWait(Duration.ofMillis(iWaitSec));
 			
 			assertEquals(login.getLoginTextOnLoginPage(), "Login", "Login text on login doesn't match");
-//			assertEquals(getProperty(DataFiles.CONFIG_FILE_PATH, "url"), context.getDriver().getCurrentUrl(), "The login page url doesn't match");
 			assertEquals(context.getOptions().get("url"), context.getDriver().getCurrentUrl(), "The login page url doesn't match");
 			
 //			context.getDriver().quit();
