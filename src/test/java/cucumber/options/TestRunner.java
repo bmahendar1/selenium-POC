@@ -8,7 +8,11 @@ import io.cucumber.testng.CucumberOptions;
 				"stepdefinations",
 				"hooks" 
 				},
-		plugin = "json:target/jsonReports/cucumber-report.json",
+//		plugin = "json:target/jsonReports/cucumber-report.json",
+		plugin = {
+				"junit:target/cucumber-reports/Cucumber.xml",
+				"json:target/jsonReports/cucumber-report.json"
+			},
 //		tags = "@read_data_from_sources", //^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
 		dryRun = false,
 		monochrome = true//UalFSzJZP4VNVEvRhkwdus3P4IRVQTDf
