@@ -2,6 +2,7 @@
 @regression 
 @recruitment 
 @records_found_table
+@orange_hrm
 Feature: Records found table delete last records
 	
 	The delete operation lets the user delete the candidate from records found

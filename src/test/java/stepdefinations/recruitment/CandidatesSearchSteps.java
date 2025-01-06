@@ -10,6 +10,7 @@ import io.cucumber.java.en.When;
 import pages.Recruitment.Candidates;
 import pages.Recruitment.TopBar;
 import pages.dashboard.*;
+import utils.Utils;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertListContains;
@@ -30,11 +31,10 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.helpers.Reporter;
 
 public class CandidatesSearchSteps {
 
-	private Context context;
+	private final Context context;
 	private ConfigLoader configLoader;
 	private Candidates candidates;
 	private TopBar topBar;
@@ -45,12 +45,11 @@ public class CandidatesSearchSteps {
 	public CandidatesSearchSteps(Context context) throws Exception {
 		this.context = context;
 		this.configLoader = new ConfigLoader();
+		this.candidates = new Candidates(context);
+		this.topBar = new TopBar(context);
 
 		this.eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
 		wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
-		candidates = new Candidates(context.getDriver(), context);
-
-		topBar = new TopBar(context.getDriver());
 	}
 
 	@Before(value = "@candidates")
@@ -77,7 +76,7 @@ public class CandidatesSearchSteps {
 	@Given("User logged into application and navigates to recruitment page")
 	public void user_logged_into_application_and_navigates_to_recruitment_page() {
 
-		SidePanel sidePanel = new SidePanel(context.getDriver());
+		SidePanel sidePanel = new SidePanel(context);
 		sidePanel.clickOnRecruitmentOption();
 
 	}
@@ -212,6 +211,7 @@ public class CandidatesSearchSteps {
 
 	@When("User clicks on the search button")
 	public void user_clicks_on_the_search_button() {
+		Utils.sleep(7000);
 		candidates.clickOnSearchButton();
 	}
 
@@ -234,7 +234,7 @@ public class CandidatesSearchSteps {
 					"The table doesn't show the records match job title.");
 
 		} else if (tags.contains("@search_by_vacancy_match")) {
-
+//			Utils.sleep(5000);
 			cells = candidates.getCellsFromVacancyColumn();
 			assertListContains(cells, cell -> cell.getText().equals((String) context.getOptions().get("option")),
 					"The table doesn't show the records match vacancy.");
@@ -265,17 +265,19 @@ public class CandidatesSearchSteps {
 		} else if (tags.contains("@search_by_date_of_application_match")) {
 			cells = candidates.getCellsFromDateOfApplicationColumn();
 
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
+			DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 			String expectedDateStr = LocalDate.of((int) context.getOptions().get("year"),
-					(int) context.getOptions().get("month"), (int) context.getOptions().get("date")).format(formatter);
+					(int) context.getOptions().get("month"), (int) context.getOptions().get("date")).format(outputFormatter);
 			LocalDate expectedDate = LocalDate.parse(expectedDateStr);
 
 			for (WebElement cell : cells) {
 				String actualDateStr = cell.getText();
-				LocalDate actualDate = LocalDate.parse(actualDateStr, formatter);
+				LocalDate actualDate = LocalDate.parse(actualDateStr, inputFormatter);
+				LocalDate formattedDate = LocalDate.parse(actualDate.format(outputFormatter));
 
-				assertTrue(actualDate.isAfter(expectedDate) || actualDate.isEqual(expectedDate),
+				assertTrue(formattedDate.isAfter(expectedDate) || formattedDate.isEqual(expectedDate),
 						"The date is not equal to or after the expected date, " + actualDate);
 			}
 		} else if (tags.contains("@search_by_method_of_application_match")) {
@@ -288,7 +290,6 @@ public class CandidatesSearchSteps {
 	@Then("the candidate tab is default tab")
 	public void the_candidate_tab_is_default_tab() throws Exception {
 
-		TopBar topBar = new TopBar(context.getDriver());
 
 		Thread.sleep(2000);
 

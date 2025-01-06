@@ -13,7 +13,7 @@ import pages.Recruitment.TopBar;
 
 public class VacanciesSearchSteps {
 
-	private Context context;
+	private final Context context;
 	private TopBar topBar;
 	private Long eWaitSec;
 	private WebDriverWait wait;
@@ -21,7 +21,7 @@ public class VacanciesSearchSteps {
 	
 	public VacanciesSearchSteps(Context context) throws Exception {
 		this.context = context;
-		this.topBar = new TopBar(context.getDriver());
+		this.topBar = new TopBar(context);
 		this.eWaitSec = (Long) context.getOptions().get("explicitWait");
 		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 	}

@@ -1,13 +1,13 @@
 package pages.Recruitment;
 
-import org.openqa.selenium.WebDriver;
+import config.initialization.Context;
 
 public class Vacancies {
 
-	private WebDriver driver;
+	private final Context context;
 	
-	public Vacancies(WebDriver driver) {
-		this.driver = driver;
+	public Vacancies(Context context) {
+		this.context = context;
 	}
 	
 }

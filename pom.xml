@@ -18,9 +18,13 @@
 				<version>3.0.0-M9</version>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
-					<parallel>methods</parallel>
-					<threadCount>2</threadCount>
-					<forkCount>2</forkCount>
+					<parallel>classes</parallel>
+					<properties>
+				    	<property>
+				        	<name>dataproviderthreadcount</name>
+				        	<value>3</value>
+				    	</property>
+					</properties>
 				</configuration>
 			</plugin>
 			<plugin>

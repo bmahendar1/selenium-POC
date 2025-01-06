@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import config.initialization.ConfigLoader;
 import config.initialization.Context;
+import utils.Utils;
 
 public class Candidates {
 	
@@ -44,14 +47,18 @@ public class Candidates {
 	private String dateOption = "//div[contains(@class, 'oxd-calendar-date') and text()='{DATE}']";
 	
 	
-	private WebDriver driver;
-	private Context context;
+	private final Context context;
+	private ConfigLoader configLoader;
 	private Long eWaitSec;
+	private WebDriverWait wait;
+	private JavascriptExecutor jse;
 	
-	public Candidates(WebDriver driver, Context context) {
-		this.driver = driver;
+	public Candidates(Context context) {
 		this.context = context;
-		this.eWaitSec = (Long) context.getOptions().get("explicitWait");
+		this.configLoader = new ConfigLoader();
+		this.eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
+		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
+		this.jse = (JavascriptExecutor) context.getDriver();
 	}
 	
 	
@@ -61,7 +68,7 @@ public class Candidates {
 	 */
 	
 	public WebElement getJobTitleDropdown() {
-		return driver.findElement(jobTitleDropdown);
+		return context.getDriver().findElement(jobTitleDropdown);
 	}
 	
 	
@@ -71,7 +78,7 @@ public class Candidates {
 	
 	
 	public WebElement getVacancyDropdown() {
-		return driver.findElement(vacancyDropdown);
+		return context.getDriver().findElement(vacancyDropdown);
 	}
 	
 
@@ -81,7 +88,7 @@ public class Candidates {
 	
 	
 	public WebElement getHiringManagerDropdown() {
-		return driver.findElement(hiringManagerDropdown);
+		return context.getDriver().findElement(hiringManagerDropdown);
 	}
 	
 	
@@ -91,7 +98,7 @@ public class Candidates {
 	
 	
 	public WebElement getStatusDropdown() {
-		return driver.findElement(statusDropdown);
+		return context.getDriver().findElement(statusDropdown);
 	}
 	
 	
@@ -101,12 +108,12 @@ public class Candidates {
 	
 	
 	public void clickOnDateOfApplicationDropdown() {
-		driver.findElement(dateOfApplication).click();
+		context.getDriver().findElement(dateOfApplication).click();
 	}
 	
 	
 	public void clickOnMethodOfApplicationDropdown() {
-		driver.findElement(methodOfApplicationDropdown).click();
+		context.getDriver().findElement(methodOfApplicationDropdown).click();
 	}
 	
 	
@@ -131,24 +138,22 @@ public class Candidates {
 	
 	
 	public void typeHintInCandidateNameTxtField(String hint) {
-		driver.findElement(candidateNameTxtField).sendKeys(hint);
+		context.getDriver().findElement(candidateNameTxtField).sendKeys(hint);
 	}
 	
 	
 	public void selectOptionFromCandidateNameHints() throws Exception {
-
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
 		
 		wait.until(new ExpectedCondition<Boolean>(){
 
 			@Override
 			public Boolean apply(WebDriver input) {
-				return !driver.findElement(candidatNameOptions).getText().equals("Searching....");
+				return !context.getDriver().findElement(candidatNameOptions).getText().equals("Searching....");
 			}
 			
 		});
 
-		List<WebElement> hints = driver.findElements(candidatNameOptions);
+		List<WebElement> hints = context.getDriver().findElements(candidatNameOptions);
 		
 		hints.getFirst().click();
 	}
@@ -156,7 +161,7 @@ public class Candidates {
 	
 	private void selectOption(String option) {
 		
-		List<WebElement> dropdownOptions = driver.findElements(By.xpath(dropdownOptionsLocator));
+		List<WebElement> dropdownOptions = context.getDriver().findElements(By.xpath(dropdownOptionsLocator));
 		
 		for(WebElement ele: dropdownOptions) {
 			if(ele.getText().equals(option)) {
@@ -173,7 +178,9 @@ public class Candidates {
 	 */
 	
 	public void clickOnSearchButton() {
-		driver.findElement(searchButton).click();
+		
+		jse.executeScript("window.scrollTo(0, 0);");
+		context.getDriver().findElement(searchButton).click();
 	}
 	
 	
@@ -201,53 +208,53 @@ public class Candidates {
 	
 	private void clickOnMonthDropdown() throws Exception {
 		
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
+		WebDriverWait wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		
 		wait.until(ExpectedConditions.elementToBeClickable(calenderMonthDropdown));
-		driver.findElement(calenderMonthDropdown).click();
+		context.getDriver().findElement(calenderMonthDropdown).click();
 	}
 	
 	
 	private void selectMonth(String month) throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
+		WebDriverWait wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		
 		By monthLocator = By.xpath(monthOption.replace("{MONTH}", month));
 		
 		wait.until(ExpectedConditions.elementToBeClickable(monthLocator));
-		driver.findElement(monthLocator).click();
+		context.getDriver().findElement(monthLocator).click();
 	}
 	
 	
 	private void clickOnYearDropdown() throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
+		WebDriverWait wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		
 		wait.until(ExpectedConditions.elementToBeClickable(calenderYearDropdown));
-		driver.findElement(calenderYearDropdown).click();
+		context.getDriver().findElement(calenderYearDropdown).click();
 	}
 	
 	
 	private void selectYear(int year) throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
+		WebDriverWait wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		
 		By yearLocator = By.xpath(yearOption.replace("{YEAR}", Integer.toString(year)));
 		
 		wait.until(ExpectedConditions.elementToBeClickable(yearLocator));
-		driver.findElement(yearLocator).click();
+		context.getDriver().findElement(yearLocator).click();
 	}
 	
 	
 	private void selectDate(int date) throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
+		WebDriverWait wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		
 		By dateLocator = By.xpath(dateOption.replace("{DATE}", Integer.toString(date)));
 		
 		wait.until(ExpectedConditions.elementToBeClickable(dateLocator));
 		
-		driver.findElement(dateLocator).click();
+		context.getDriver().findElement(dateLocator).click();
 	}
 	
 	/**
@@ -258,16 +265,16 @@ public class Candidates {
 	
 	public boolean infoPopupDisplayed() throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
+		WebDriverWait wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		
-		wait.until(ExpectedConditions.visibilityOf(driver.findElement(infoPopup)));
+		wait.until(ExpectedConditions.visibilityOf(context.getDriver().findElement(infoPopup)));
 		
-		return driver.findElement(infoPopup).isDisplayed();
+		return context.getDriver().findElement(infoPopup).isDisplayed();
 	}
 	
 	
 	public String getMessageOnInfoPopup() {
-		return driver.findElement(msgOnInfoPopup).getText();
+		return context.getDriver().findElement(msgOnInfoPopup).getText();
 	}
 	
 	
@@ -280,12 +287,13 @@ public class Candidates {
 	
 	public List<WebElement> getCellsFromVacancyColumn() throws Exception {
 		
+		wait.until(ExpectedConditions.visibilityOfElementLocated(vacancyColumn));
 		return getCells(vacancyColumn);
 	}
 	
 	
 	public List<WebElement> getCellsFromHiringManagerColumn() throws Exception {
-		
+		Utils.sleep(5000);
 		return getCells(hiringManagerColumn);
 	}
 	
@@ -307,9 +315,7 @@ public class Candidates {
 	
 	private List<WebElement> getCells(By location) throws Exception {
 		
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec), null);
-		
-		List<WebElement> cells = driver.findElements(location);
+		List<WebElement> cells = context.getDriver().findElements(location);
 		wait.until(ExpectedConditions.visibilityOfAllElements(cells));
 		
 		return cells;

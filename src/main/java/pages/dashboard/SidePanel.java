@@ -1,20 +1,19 @@
 package pages.dashboard;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+
+import config.initialization.Context;
 
 public class SidePanel {
 
 	private By recruitment = By.xpath("//span[text()='Recruitment']");
+	private final Context context;
 	
-	
-	private WebDriver driver;
-	
-	public SidePanel(WebDriver driver) {
-		this.driver = driver;
+	public SidePanel(Context context) {
+		this.context = context;
 	}
 	
 	public void clickOnRecruitmentOption() {
-		driver.findElement(recruitment).click();
+		context.getDriver().findElement(recruitment).click();
 	}
 }

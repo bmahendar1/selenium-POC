@@ -1,18 +1,17 @@
 package hooks;
 
-import java.util.Set;
-
 import config.initialization.Context;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import stepdefinations.login.LoginSteps;
+import utils.Utils;
 
 public class Hooks {
 	
-	private Context context;
+	private final Context context;
 	
-	public Hooks(Context driver) {
-		this.context = driver;
+	public Hooks(Context context) {
+		this.context = context;
 	}
 
 	@Before(
@@ -27,6 +26,8 @@ public class Hooks {
 		loginSteps.the_login_page_appears();
 		loginSteps.user_enters_username_password_and_clicks_on_login();
 		loginSteps.the_user_navigate_to_home_or_landing_page();
+		
+		Utils.sleep(7000);
 	}
 	
 	
@@ -34,14 +35,8 @@ public class Hooks {
 			order=10
 			)
 	public void tearDown() {
-		if(context.getDriver() != null) {
-			Set<String> windows = context.getDriver().getWindowHandles();
-			
-			for(String windowId: windows) {				
-//				context.getDriver().close();
-				context.getDriver().switchTo().window(windowId).close();
-			}
-		}
+		
+		context.quitDriver();
 	}
 	
 }

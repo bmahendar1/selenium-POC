@@ -1,18 +1,19 @@
 package pages.dashboard;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+
+import config.initialization.Context;
 
 public class UserDropdownTabOptions {
 
 	private By logout = By.xpath("//li/descendant::a[text()='Logout']");
-	private WebDriver driver;
+	private final Context context;
 	
-	public UserDropdownTabOptions(WebDriver driver) {
-		this.driver = driver;
+	public UserDropdownTabOptions(Context context) {
+		this.context = context;
 	}
 	
 	public void clickOnLogoutOption() {
-		driver.findElement(logout).click();
+		context.getDriver().findElement(logout).click();
 	}
 }

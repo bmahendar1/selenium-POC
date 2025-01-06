@@ -26,7 +26,7 @@ import java.time.Duration;
 public class LoginSteps {
 	
 	private LoginPage login;
-	private Context context;
+	private final Context context;
 	private ConfigLoader configLoader;
 	private Long iWaitSec;
 	private Long eWaitSec;
@@ -95,7 +95,7 @@ public class LoginSteps {
 	@Given("The login page appears")
 	public void the_login_page_appears() throws Exception {
 		
-		login = new LoginPage(this.context.getDriver());
+		login = new LoginPage(context.getDriver());
 		
 		String url = context.getDriver().getCurrentUrl();
 		String loginText = login.getLoginTextOnLoginPage();
@@ -129,7 +129,7 @@ public class LoginSteps {
 		
 		String expectedDashboardText = "Dashboard";
 		
-		Dashboard homePage = new Dashboard(context.getDriver());
+		Dashboard homePage = new Dashboard(context);
 		String actualDashboardText = homePage.getDashboardText();
 		
 		assertEquals(actualDashboardText, expectedDashboardText, "The Dashboard Text on the home doesn't match");
@@ -140,7 +140,7 @@ public class LoginSteps {
 	@Then("The user logs out of the application")
 	public void the_user_logs_out_of_the_application() throws Exception {
 		
-		Dashboard dashboard = new Dashboard(context.getDriver());
+		Dashboard dashboard = new Dashboard(context);
 
 		@SuppressWarnings("deprecation")
 		String initialValue = dashboard.getUserDropdownMenuElement().getAttribute("class");
@@ -165,7 +165,7 @@ public class LoginSteps {
 		
 		
 		if(dashboard.dropdownMenuDisplayed()) {
-			UserDropdownTabOptions userDropdownTabOptions = new UserDropdownTabOptions(context.getDriver());
+			UserDropdownTabOptions userDropdownTabOptions = new UserDropdownTabOptions(context);
 			userDropdownTabOptions.clickOnLogoutOption();
 			
 			context.getDriver().manage().timeouts().implicitlyWait(Duration.ofMillis(iWaitSec));
@@ -183,7 +183,7 @@ public class LoginSteps {
 	@Given("The user enters {string} and {string} and clicks on login")
 	public void the_user_enters_and_and_clicks_on_login(String username, String password) throws Exception {
 		
-		login = new LoginPage(this.context.getDriver());
+		login = new LoginPage(context.getDriver());
 		login.login(username, password);
 	}
 	
