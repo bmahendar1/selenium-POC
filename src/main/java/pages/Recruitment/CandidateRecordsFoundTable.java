@@ -1,10 +1,11 @@
 package pages.Recruitment;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import config.initialization.Context;
 
 
 public class CandidateRecordsFoundTable {
@@ -39,12 +40,12 @@ public class CandidateRecordsFoundTable {
 	private String successPopupContent= "div.oxd-toast-content--success>p.oxd-text--toast-message";
 	
 	
-	private WebDriver driver;
+	private final Context context;
 	
-	public CandidateRecordsFoundTable(WebDriver driver) {
-		this.driver = driver;
+	public CandidateRecordsFoundTable(Context context) {
+		this.context = context;
 		
-		PageFactory.initElements(this.driver, this);
+		PageFactory.initElements(context.getDriver(), this);
 	}
 	
 	

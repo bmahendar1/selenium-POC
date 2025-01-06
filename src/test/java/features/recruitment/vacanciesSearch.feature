@@ -2,6 +2,7 @@
 @regression 
 @recruitment 
 @vacancies
+@orange_hrm
 Feature: Vacancies search
 
 	Background:
@@ -47,12 +48,12 @@ Feature: Vacancies search
     
   @search_by_status_no_match
   Scenario: Search for the candidate by status that has no match
-    And The user selects "Interview Passed" status from the status dropdown
+    And The user selects "Closed" status from the status dropdown
     When User clicks on the search button
     Then No records found message displays
 
   @search_by_status_match
   Scenario: Search for the candidate by status that has a match
-    And The user selects "Shortlisted" status from the status dropdown
+    And The user selects "Active" status from the status dropdown
     When User clicks on the search button
     Then Matching records shows up in the records found table

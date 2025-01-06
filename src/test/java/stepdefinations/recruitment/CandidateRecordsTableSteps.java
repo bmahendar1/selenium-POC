@@ -21,7 +21,7 @@ import java.time.Duration;
 
 public class CandidateRecordsTableSteps {
 	
-	private Context context;
+	private final Context context;
 	private CandidateRecordsFoundTable recordsFoundTbl;
 	private long eWaitSec;
 	private WebDriverWait wait;
@@ -31,7 +31,7 @@ public class CandidateRecordsTableSteps {
 
 	public CandidateRecordsTableSteps(Context context) throws Exception {
 		this.context= context;
-		this.recordsFoundTbl= new CandidateRecordsFoundTable(this.context.getDriver());
+		this.recordsFoundTbl= new CandidateRecordsFoundTable(this.context);
 		this.eWaitSec= (Long) context.getOptions().get("explicitWait");
 		this.wait= new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 	}

@@ -4,12 +4,12 @@ package pages.dashboard;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import config.initialization.ConfigLoader;
+import config.initialization.Context;
 
 
 public class Dashboard {
@@ -20,14 +20,14 @@ public class Dashboard {
 	private By userDropdownMenuBeforeClick = By.cssSelector("div.oxd-topbar-header-userarea>ul>li");
 	
 	
-	private WebDriver driver;
 	private long iWaitSec;
 	private long eWaitSec;
 	private ConfigLoader configLoader;
+	private final Context context;
 	
 	
-	public Dashboard(WebDriver driver) {
-		this.driver = driver;
+	public Dashboard(Context context) {
+		this.context = context;
 		this.configLoader = new ConfigLoader();
 		this.iWaitSec = Long.valueOf(configLoader.getProperty("implicitWait"));
 		this.eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
@@ -35,27 +35,27 @@ public class Dashboard {
 	
 	public String getDashboardText() throws Exception {
 		
-		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(iWaitSec));
+		context.getDriver().manage().timeouts().implicitlyWait(Duration.ofMillis(iWaitSec));
 		
-		return driver.findElement(dashboardText).getText();
+		return context.getDriver().findElement(dashboardText).getText();
 	}
 	
 	public void clickOnUserDropdownTab () {
-		driver.findElement(userDropdownTab).click();
+		context.getDriver().findElement(userDropdownTab).click();
 	}
 	
 	public boolean dropdownMenuDisplayed() throws Exception {
 		
-		WebElement element = driver.findElement(userDropdownMenu);
+		WebElement element = context.getDriver().findElement(userDropdownMenu);
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
+		WebDriverWait wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 		wait.until(ExpectedConditions.visibilityOf(element));
 		
 		return element.isDisplayed();
 	}
 	
 	public WebElement getUserDropdownMenuElement() {
-		return driver.findElement(userDropdownMenuBeforeClick);
+		return context.getDriver().findElement(userDropdownMenuBeforeClick);
 	}
 	
 }

@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 public class Context {
 
 	private WebDriver driver;
+	
 	private Map<String, Object> options;
 	
 	public void setDriver(WebDriver driver) {
@@ -17,6 +18,11 @@ public class Context {
 	public WebDriver getDriver() {
 		return driver;
 	}
+	
+	public void quitDriver() {
+		driver.quit();
+    }
+	
 	
 	public void setOption(String key, Object value) {
 		

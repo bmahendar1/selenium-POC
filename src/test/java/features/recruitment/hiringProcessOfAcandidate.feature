@@ -2,6 +2,7 @@
 @regression
 @recruitment
 @help
+@orange_hrm
 Feature: Hiring process of a candidate
   This feature is to test window handles
   

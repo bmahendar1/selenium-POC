@@ -8,13 +8,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import config.initialization.ConfigLoader;
-
+import config.initialization.Context;
 
 import java.time.Duration;
 
 public class TopBar {
-
-	private WebDriver driver;
 	
 	private String vacanciesLocator = "//nav[@aria-label='Topbar Menu']/ul/li[2]";
 
@@ -26,13 +24,15 @@ public class TopBar {
 	private WebDriverWait wait;
 	private long eWaitSec;
 	private ConfigLoader configLoader;
+	private final Context context;
 	
-	public TopBar(WebDriver driver) throws Exception {
-		this.driver = driver;
+	
+	public TopBar(Context context) throws Exception {
+		this.context = context;
 		this.configLoader = new ConfigLoader();
 		
 		eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
-		wait = new WebDriverWait(driver, Duration.ofMillis(eWaitSec));
+		wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
 	}
 
 	public WebElement getCandidateElement() throws Exception {
@@ -40,15 +40,15 @@ public class TopBar {
 
 			@Override
 			public Boolean apply(WebDriver input) {
-				return driver.findElement(candidateVisitedNode).isDisplayed();
+				return context.getDriver().findElement(candidateVisitedNode).isDisplayed();
 			}
 			
 		}));
-		return driver.findElement(candidateVisitedNode);
+		return context.getDriver().findElement(candidateVisitedNode);
 	}
 	
 	public WebElement getVacanciesElement() {
-		return driver.findElement(vacanciesVisitedNode);
+		return context.getDriver().findElement(vacanciesVisitedNode);
 	}
 	
 	
@@ -58,7 +58,7 @@ public class TopBar {
 	
 	
 	public WebElement getHelpButton() {
-		return driver.findElement(helpButton);
+		return context.getDriver().findElement(helpButton);
 	}
 	
 	public void clickOnHelpButton() {

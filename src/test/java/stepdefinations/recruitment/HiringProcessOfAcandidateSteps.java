@@ -14,15 +14,15 @@ import pages.Recruitment.TopBar;
 
 public class HiringProcessOfAcandidateSteps {
 	
-	private Context context;
+	private final Context context;
 	private TopBar topBar;
 	private HiringProcessOfACandidate hiringProcess;
 
 	public HiringProcessOfAcandidateSteps(Context context) throws Exception {
 		this.context= context;
+		this.topBar = new TopBar(context);
 		
-		topBar = new TopBar(this.context.getDriver());
-		hiringProcess = new HiringProcessOfACandidate(this.context.getDriver());
+		hiringProcess = new HiringProcessOfACandidate(this.context);
 	}
 	
 	

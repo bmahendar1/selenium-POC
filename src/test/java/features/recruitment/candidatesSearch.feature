@@ -2,6 +2,7 @@
 @regression 
 @recruitment 
 @candidates
+@orange_hrm
 Feature: Recruitement search for candidates feature
 
 	Background:
@@ -69,7 +70,7 @@ Feature: Recruitement search for candidates feature
     
   @search_by_date_of_application_match
   Scenario: Search for the candidate by date of application calender that has a match
-    And The user selects year 2024 month 6 date 2 from date of application calender
+    And The user selects year 2024 month 2 date 6 from date of application calender
     When User clicks on the search button
     Then Matching records shows up in the records found table
     
