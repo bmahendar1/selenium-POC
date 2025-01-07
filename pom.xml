@@ -19,6 +19,8 @@
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
 					<parallel>classes</parallel>
+					<!--threadCount>2</threadCount>
+					<forkCount>2</forkCount-->
 					<properties>
 				    	<property>
 				        	<name>dataproviderthreadcount</name>

@@ -337,7 +337,7 @@ public class HerokuappTests {
 	
 	@Then("user checks the checkbox and clicks on remove button")
 	public void user_checks_the_checkbox_and_clicks_on_remove_button() {
-		
+		Utils.sleep(8000);
 		checkbox = context.getDriver().findElement(By.id("checkbox"));
 		checkbox.click();
 		
@@ -365,6 +365,7 @@ public class HerokuappTests {
 	@Then("the checkbox will reappear")
 	public void the_checkbox_will_reappear() {
 
+		Utils.sleep(8000);
 		checkbox = context.getDriver().findElement(By.id("checkbox"));
 		successMsg = context.getDriver().findElement(By.id("message")).getText();
 		
