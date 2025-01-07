@@ -36,7 +36,8 @@ public class Hooks {
 			)
 	public void tearDown() {
 		
-		context.quitDriver();
+		if(context.getDriver() != null)
+			context.quitDriver();
 	}
 	
 }

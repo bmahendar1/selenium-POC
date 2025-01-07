@@ -337,7 +337,6 @@ public class HerokuappTests {
 	
 	@Then("user checks the checkbox and clicks on remove button")
 	public void user_checks_the_checkbox_and_clicks_on_remove_button() {
-		
 		checkbox = context.getDriver().findElement(By.id("checkbox"));
 		checkbox.click();
 		
