@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -41,25 +42,30 @@ import static utils.Utils.*;
 
 public class HerokuappTests {
 	
-	private Context context;
-	private String url = "https://admin:admin@the-internet.herokuapp.com/";
+	private final Context context;
+	private String url;
 	private long eWaitSec;
 	private ConfigLoader configLoader;
+	private JavascriptExecutor jse;
+	private WebDriverWait wait;
 	
 	
 	public HerokuappTests(Context context) {
 		this.context = context;
 		this.configLoader = new ConfigLoader();
 		this.eWaitSec = Long.valueOf(configLoader.getProperty("explicitWait"));
+		this.jse = (JavascriptExecutor) this.context.getDriver();
+		this.url = this.configLoader.getProperty("herokuapp_url");
+		this.wait = new WebDriverWait(this.context.getDriver(), Duration.ofMillis(this.eWaitSec));
 	}
 	
 	
-	private void launchBrowser() {
-		
-		WebDriver driver = new ChromeDriver();		
-		context.setDriver(driver);
-		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
-	}
+//	private void launchBrowser() {
+//		
+//		WebDriver driver = new ChromeDriver();		
+//		context.setDriver(driver);
+//		this.wait = new WebDriverWait(context.getDriver(), Duration.ofMillis(eWaitSec));
+//	}
 	
 	
 	private void launchBrowserWithOptions(ChromeOptions options) {
@@ -76,7 +82,7 @@ public class HerokuappTests {
 	@Given("user opens the app keeping username and password in the url")
 	public void user_opens_the_app_keeping_username_and_password_in_the_url() {
 		
-		launchBrowser();
+//		launchBrowser();
 		context.getDriver().get(url+"basic_auth/");
 		
 	}
@@ -95,8 +101,8 @@ public class HerokuappTests {
 	@Given("user navigate to the herokuapp menu landing page")
 	public void user_navigate_to_the_herokuapp_menu_landing_page() {
 	    
-		launchBrowser();
-		context.getDriver().get(url);
+//		launchBrowser();
+//		context.getDriver().get(url);
 		
 		String landingPageUrl = context.getDriver().getCurrentUrl();
 		Assert.assertEquals(landingPageUrl, url, "The landing page url is not matching expected");
@@ -318,7 +324,6 @@ public class HerokuappTests {
 	private WebElement checkbox;
 	private WebElement button;
 	private String successMsg;
-	private WebDriverWait wait;
 	
 	
 	@Given("clicks on the Dynamic Controls option")
@@ -337,12 +342,22 @@ public class HerokuappTests {
 	
 	@Then("user checks the checkbox and clicks on remove button")
 	public void user_checks_the_checkbox_and_clicks_on_remove_button() {
+		
 		checkbox = context.getDriver().findElement(By.id("checkbox"));
-		checkbox.click();
-		
-		button = context.getDriver().findElement(By.xpath("//button[@type='button']"));
-		button.click();
-		
+		if(checkbox.isDisplayed()) {
+			
+			checkbox.click();
+			
+			button = context.getDriver().findElement(By.xpath("//button[@type='button']"));
+			button.click();
+			
+			wait.until(new ExpectedCondition<Boolean>() {
+				@Override
+				public Boolean apply(WebDriver input) {
+					return context.getDriver().findElement(By.id("message")).getText().equals("It's gone!");
+				}
+			});
+		}		
 	}
 	
 	@Then("The checkbox will disappear")
@@ -359,6 +374,12 @@ public class HerokuappTests {
 	public void user_clicks_on_the_add_button() {
 		
 		button.click();
+		wait.until(new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver input) {
+				return context.getDriver().findElement(By.id("message")).getText().equals("It's back!");
+			}
+		});
 	}
 	
 	@Then("the checkbox will reappear")
@@ -552,9 +573,6 @@ public class HerokuappTests {
 	@Then("the user mouse over to the url bar")
 	public void the_user_mouse_over_to_the_url_bar() {
 		
-//		Actions actions = new Actions(context.getDriver());
-		
-		JavascriptExecutor js = (JavascriptExecutor) context.getDriver();
 //		long windowWidth = (long) js.executeScript("return window.innerWidth;");
 //        long windowHeight = (long) js.executeScript("return window.innerHeight;");
 //        
@@ -563,18 +581,57 @@ public class HerokuappTests {
 //		
 ////		actions.moveByOffset(0, (int)(windowHeight * -0.9)).perform();
 //		actions.moveByOffset((int) windowWidth/2, (int) windowHeight/2).build().perform();
-		js.executeScript("document.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));");
+
+//		int windowHeight = context.getDriver().manage().window().getSize().getHeight();
+//		int windowWidth = context.getDriver().manage().window().getSize().getWidth();
+//		System.out.println(windowHeight+" "+windowWidth);
+		
+		
+		jse.executeScript(
+	            "document.addEventListener('mousemove', function(event) {" +
+	            "    window.mouseX = event.clientX;" +
+	            "    window.mouseY = event.clientY;" +
+	            "});"
+	        );
+		
+		
+		Actions actions = new Actions(context.getDriver());
+		
+//		long documentHeight = (long) jse.executeScript("return document.body.scrollHeight");
+//		long documentWidth = (long) jse.executeScript("return document.body.scrollWidth");
+//		
+//		System.out.println(documentHeight+" "+documentWidth);
+//		
+//		int y = (int)-documentHeight/15;
+//		System.out.println(y);
+		
+		actions.moveByOffset(91, 2).perform();
+
+		Long mouseX = (Long) jse.executeScript("return window.mouseX;");
+		Long mouseY = (Long) jse.executeScript("return window.mouseY;");
+		
+		System.out.println("Mouse X: " + mouseX);
+		System.out.println("Mouse Y: " + mouseY);
+		
+//		js.executeScript("document.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));");
 
 	}
 	
 	@Then("the exit intent modal display")
 	public void the_exit_intent_modal_display() {
 		
-		
-
-		WebElement exitIntentModal = context.getDriver().findElement(By.cssSelector("div.modal"));
-		
-		boolean isExitIntentModalDisplayed = wait.until(ExpectedConditions.visibilityOf(exitIntentModal)).isDisplayed();
+		boolean isExitIntentModalDisplayed;
+				
+				try {
+					isExitIntentModalDisplayed = wait.until(new ExpectedCondition<Boolean>() {
+						@Override
+						public Boolean apply(WebDriver input) {
+							return context.getDriver().findElement(By.id("ouibounce-modal")).getDomAttribute("style").equals("display: block;");
+						}
+					});
+				} catch (TimeoutException te) {
+					isExitIntentModalDisplayed = false;
+				}
 		
 		Assert.assertTrue(isExitIntentModalDisplayed, "The exit intent popup modal is not displayed");
 	}
@@ -582,11 +639,22 @@ public class HerokuappTests {
 	@Then("the exit intent modal is closed")
 	public void the_exit_intent_modal_will_close() {
 		
-		WebElement exitIntentModal = context.getDriver().findElement(By.cssSelector("div.modal"));
+		boolean isExitIntentModalClosed;
+				
+				try {
+					isExitIntentModalClosed = wait.until(new ExpectedCondition<Boolean>() {
+						@Override
+						public Boolean apply(WebDriver input) {
+							boolean flag;
+								flag = context.getDriver().findElement(By.id("ouibounce-modal")).getDomAttribute("style").equals("display: none;");
+							return flag;
+						}
+					});
+				} catch (TimeoutException te) {
+					isExitIntentModalClosed = false;
+				}
 		
-		boolean isExitIntentModalDisplayed = wait.until(ExpectedConditions.invisibilityOf(exitIntentModal));
-		
-		Assert.assertFalse(isExitIntentModalDisplayed, "The exit intent popup modal is displayed");
+		Assert.assertTrue(isExitIntentModalClosed, "The exit intent popup modal is not closed");
 	}
 	
 	/**
@@ -737,8 +805,6 @@ public class HerokuappTests {
 	@Then("user scroll down to the middle of the page")
 	public void user_scroll_down_to_the_middle_of_the_page() {
 		
-		JavascriptExecutor jse = (JavascriptExecutor) context.getDriver();
-		
 		Long pageHeight = (Long) jse.executeScript("return document.body.scrollHeight");
 		
 		jse.executeScript("window.scrollTo(0, arguments[0]);", (int)(pageHeight/2));
@@ -767,8 +833,6 @@ public class HerokuappTests {
 	
 	@Then("user scroll down to the bottom of the page")
 	public void user_scroll_down_to_the_bottom_of_the_page() {
-		
-		JavascriptExecutor jse = (JavascriptExecutor) context.getDriver();
 		
 		Long pageHeight = (Long) jse.executeScript("return document.body.scrollHeight");
 		System.out.println(pageHeight);
@@ -1075,8 +1139,6 @@ public class HerokuappTests {
 	
 	@Then("user scroll down until he reaches {int} length height")
 	public void user_scroll_down_until_he_reaches_length_height(Integer scrollTo) {
-		
-		JavascriptExecutor jse = (JavascriptExecutor) context.getDriver();
 		
 		Long scrollHeight = Long.valueOf(String.valueOf(jse.executeScript("return document.body.scrollHeight")));
 
@@ -1480,8 +1542,6 @@ public class HerokuappTests {
 	public void one_of_the_following_messages_will_shows_on_the_page(List<String> messages) {
 
 		WebElement unsuccessfulMessageWebEle = context.getDriver().findElement(By.id("flash"));
-		
-		JavascriptExecutor jse = (JavascriptExecutor) context.getDriver();
 		
 		String actionMessage = (String) jse.executeScript("return arguments[0].childNodes[0].nodeValue.trim()", unsuccessfulMessageWebEle);
 		
