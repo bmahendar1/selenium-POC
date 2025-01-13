@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
+import org.openqa.selenium.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -177,16 +177,21 @@ public class HerokuappTests {
 	@Then("user clicks on the gallary option")
 	public void user_clicks_on_the_gallary_option() {
 		
-		
+		boolean isGallaryOptionDisplayed = false;
 		try {
 			WebElement gallaryOption = context.getDriver().findElement(By.linkText("Gallery"));
-			
-			if(gallaryOption.isDisplayed()) {
+			isGallaryOptionDisplayed = gallaryOption.isDisplayed();
+
+			if(isGallaryOptionDisplayed) {
 				gallaryOption.click();
 			}
+			
 		} catch (NoSuchElementException e) {
-			Assert.assertTrue(false, "The gallary option is not displayed");
+
 		}
+		
+		Assert.assertTrue(isGallaryOptionDisplayed, "The gallary option is not displayed");
+		
 	}
 	
 	@Then("user will navigate to gallary page")
