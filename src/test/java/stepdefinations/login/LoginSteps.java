@@ -47,7 +47,7 @@ public class LoginSteps {
 		
 		
 		String browser = configLoader.getProperty("browser");
-		String url = configLoader.getProperty("url");
+		String url = configLoader.getProperty("orange_hrm_url");
 		
 		context.setOption("url", url);
 		
@@ -173,7 +173,6 @@ public class LoginSteps {
 			assertEquals(login.getLoginTextOnLoginPage(), "Login", "Login text on login doesn't match");
 			assertEquals(context.getOptions().get("url"), context.getDriver().getCurrentUrl(), "The login page url doesn't match");
 			
-//			context.getDriver().quit();
 		} else {
 			assertTrue(false, "The dashboard user dropdown menu is not displayed");
 		}
