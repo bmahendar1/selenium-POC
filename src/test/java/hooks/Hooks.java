@@ -134,12 +134,11 @@ public class Hooks {
 			
 			System.out.println(context.getOptions().get(scenario.getName()));
 			String scenarioName = scenario.getName();
-			System.out.println("BEFORE");
+
 			@SuppressWarnings("unchecked")
 			ArrayList<Result> results = (ArrayList<Result>) context.getOptions().get(scenario.getName());
 			String contentText = results.toString();
-			System.out.println(contentText);
-			System.out.println("AFTER");
+
 //			System.out.println(scenarioName.toUpperCase());
 //			System.out.println(result.getTestContext().toString());
 //			System.out.println(scenario);
