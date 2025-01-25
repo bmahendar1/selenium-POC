@@ -3,6 +3,8 @@ package hooks;
 
 import java.lang.reflect.Field;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.openqa.selenium.By;
@@ -14,6 +16,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+
+import com.google.api.client.util.DateTime;
 
 import config.initialization.ConfigLoader;
 import config.initialization.Context;
@@ -132,16 +136,15 @@ public class Hooks {
 		
 		if (scenario.isFailed()) {
 			
-			System.out.println(context.getOptions().get(scenario.getName()));
-			String scenarioName = scenario.getName();
+			LocalDateTime currentDateTime = LocalDateTime.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			String formattedDateTime = currentDateTime.format(formatter);
+			
+			String scenarioName = "UI - "+scenario.getName()+" "+formattedDateTime;
 
 			@SuppressWarnings("unchecked")
 			ArrayList<Result> results = (ArrayList<Result>) context.getOptions().get(scenario.getName());
 			String contentText = results.toString();
-
-//			System.out.println(scenarioName.toUpperCase());
-//			System.out.println(result.getTestContext().toString());
-//			System.out.println(scenario);
 			
 //			TakesScreenshot takesScreenshot = (TakesScreenshot) context.getDriver();
 //		    byte[] screenshot = takesScreenshot.getScreenshotAs(OutputType.BYTES);
