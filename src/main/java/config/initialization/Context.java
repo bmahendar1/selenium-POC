@@ -5,11 +5,17 @@ import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
 
-public class Context {
+import config.RESTJiraTicketCreator;
+
+public class Context extends RESTJiraTicketCreator {
 
 	private WebDriver driver;
-	
 	private Map<String, Object> options;
+//	private RESTJiraTicketCreator jiraTicketCreator;
+	
+	public Context() {
+//		this.jiraTicketCreator = new RESTJiraTicketCreator();
+	}
 	
 	public void setDriver(WebDriver driver) {
 		this.driver = driver;
@@ -23,6 +29,9 @@ public class Context {
 		driver.quit();
     }
 	
+//	public RESTJiraTicketCreator getJiraTickerCreator() {
+//		return jiraTicketCreator;
+//	}
 	
 	public void setOption(String key, Object value) {
 		

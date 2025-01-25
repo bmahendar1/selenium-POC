@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import config.initialization.ConfigLoader;
 import config.initialization.Context;
+import config.initialization.WebDriverFactory;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -43,49 +44,51 @@ public class LoginSteps {
 	@Given("User opens his or her favourite browser and types url")
 	public void user_opens_the_favourite_browser_and_types_url() throws Exception {
 		
-		WebDriver driver;
-		
+//		WebDriver driver;
 		
 		String browser = configLoader.getProperty("browser");
 		String url = configLoader.getProperty("orange_hrm_url");
 		
 		context.setOption("url", url);
 		
-		if(browser.equalsIgnoreCase("chrome")) {
-			
-			ChromeOptions options = new ChromeOptions();
-			options.addArguments("--disable-notifications");
-//			options.addArguments("--start-maximized");
-//			options.addArguments("--incognito");
-			
-			driver = new ChromeDriver(options);
-
-		} else if(browser.equalsIgnoreCase("firefox")){		
-			
-			FirefoxProfile profile = new FirefoxProfile();
-	        
-	        // Disable web notifications
-	        profile.setPreference("dom.webnotifications.enabled", false);
-	        
-	        // Disable push notifications
-	        profile.setPreference("dom.push.enabled", false);
-
-	        // Disable geo-location prompts
-	        profile.setPreference("geo.enabled", false);
-	        
-	        // Create FirefoxOptions and set the profile
-	        FirefoxOptions options = new FirefoxOptions();
-	        options.setProfile(profile);
-
-//			options.addArguments("-private");
-			
-			driver = new FirefoxDriver(options);
-			
-		} else {
-			throw new Exception("Invalid browser choice");
-		}
+		WebDriverFactory webDriverFactory = new WebDriverFactory(browser);
 		
-		context.setDriver(driver);
+//		if(browser.equalsIgnoreCase("chrome")) {
+//			
+//			ChromeOptions options = new ChromeOptions();
+//			options.addArguments("--disable-notifications");
+////			options.addArguments("--start-maximized");
+////			options.addArguments("--incognito");
+//			
+//			driver = new ChromeDriver(options);
+//
+//		} else if(browser.equalsIgnoreCase("firefox")){		
+//			
+//			FirefoxProfile profile = new FirefoxProfile();
+//	        
+//	        // Disable web notifications
+//	        profile.setPreference("dom.webnotifications.enabled", false);
+//	        
+//	        // Disable push notifications
+//	        profile.setPreference("dom.push.enabled", false);
+//
+//	        // Disable geo-location prompts
+//	        profile.setPreference("geo.enabled", false);
+//	        
+//	        // Create FirefoxOptions and set the profile
+//	        FirefoxOptions options = new FirefoxOptions();
+//	        options.setProfile(profile);
+//
+////			options.addArguments("-private");
+//			
+//			driver = new FirefoxDriver(options);
+//			
+//		} else {
+//			throw new Exception("Invalid browser choice");
+//		}
+		
+//		context.setDriver(driver);
+		context.setDriver(webDriverFactory.createWebDriver());
 		context.getDriver().manage().window().maximize();
 		context.getDriver().get(url);
 		context.setOption("implicitWait", iWaitSec);
