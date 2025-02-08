@@ -74,7 +74,7 @@ public class Utils {
 	public static <T extends Comparable<T>> boolean isSortedAsc(List<T> items) {
 		
 		for(int i=0; i<items.size() - 1; i++) {
-			if(!(items.get(i).compareTo(items.get(i+1)) <= 0)) {
+			if(!(items.get(i).compareTo(items.get(i+1)) < 0)) {
 				return false;
 			}
 		}
@@ -84,7 +84,7 @@ public class Utils {
 	public static <T extends Comparable<T>> boolean isSortedDesc(List<T> items) {
 		
 		for(int i=0; i<items.size() - 1; i++) {
-			if(!(items.get(i).compareTo(items.get(i+1)) >= 0)) {
+			if(!(items.get(i).compareTo(items.get(i+1)) > 0)) {
 				return false;
 			}
 		}

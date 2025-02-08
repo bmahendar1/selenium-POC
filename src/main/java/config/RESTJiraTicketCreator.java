@@ -33,7 +33,7 @@ public class RESTJiraTicketCreator {
 		
 		return 
 		given()
-//			.log().all()
+			.log().all()
 			.contentType(ContentType.JSON)
 			.header("Authorization", "Basic "+encodedAuth)
 			.body(getPayload(summary, contentText, projectId, issueTypeId, parentKey)).
