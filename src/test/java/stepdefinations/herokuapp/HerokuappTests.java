@@ -615,8 +615,8 @@ public class HerokuappTests {
 		Long mouseX = (Long) jse.executeScript("return window.mouseX;");
 		Long mouseY = (Long) jse.executeScript("return window.mouseY;");
 		
-//		System.out.println("Mouse X: " + mouseX);
-//		System.out.println("Mouse Y: " + mouseY);
+		System.out.println("Mouse X: " + mouseX);
+		System.out.println("Mouse Y: " + mouseY);
 		
 //		js.executeScript("document.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));");
 
